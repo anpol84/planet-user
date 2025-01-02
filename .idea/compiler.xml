@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mapstruct/mapstruct-processor/1.5.5.Final/897f6f115930b936287bef552bf5fe28cc64717d/mapstruct-processor-1.5.5.Final.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/annotation-processors/1.1.17/a93b3f5746dea37436e23e669bee9e90ab416bf3/annotation-processors-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.36/5a30490a6e14977d97d9c73c924c1f1b5311ea95/lombok-1.18.36.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/config-annotation-processor/1.1.17/535b3343c963dfa8f40df43c78de5fc1d7057656/config-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/json-annotation-processor/1.1.17/11f5473817b2587b0c103dd924ecaf03787afdea/json-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/http-server-annotation-processor/1.1.17/4a9352f57dd3bdc95822454de9e9ad1b2b52e045/http-server-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/http-client-annotation-processor/1.1.17/c37b1e05213edb81ff6c4e47c3ed0d9700a2a780/http-client-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/database-annotation-processor/1.1.17/e2d4a4159371c8a5b74686d854c19010da9e4eb/database-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/kafka-annotation-processor/1.1.17/9a9eab4490d10a0271ee5b8f8d65d1dff8f025f8/kafka-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/validation-annotation-processor/1.1.17/99dea7ae363a000b3285edbe9172e42d500c4196/validation-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/mapstruct-java-extension/1.1.17/3ae3e03f8c050828834b279e9b605be465ca516/mapstruct-java-extension-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/grpc-client-annotation-processor/1.1.17/dc7789b4865a977f919ac19ee832ec5036add52c/grpc-client-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/kora-app-annotation-processor/1.1.17/544d52448c7865aca45ef594348e456754dd2be8/kora-app-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/resilient-annotation-processor/1.1.17/cb0352b4a110f82c772d0c3e6b0ff74461d8f9a8/resilient-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/cache-annotation-processor/1.1.17/34fd4862d5359962357aff5a09ba86852d62c31a/cache-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/declarative-logging-annotation-processor/1.1.17/7465233bc3cfe9924eee86d261c2de73315e5c0e/declarative-logging-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/aop-annotation-processor/1.1.17/73b3760afe3a6ea98417288292747609b02e033f/aop-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/soap-client-annotation-processor/1.1.17/9180f3b9c1d2e6f30bc7bbb47686acd4db81fc60/soap-client-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/scheduling-annotation-processor/1.1.17/85ee138f72f8a519c85494700768ed5f1106d39b/scheduling-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora.experimental/s3-client-annotation-processor/1.1.17/efb0eb260afd403adcca910f167559cf5b58bea9/s3-client-annotation-processor-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/annotation-processor-common/1.1.17/e29f606db3ffc64a45dfeca82094ba1099f1a0e4/annotation-processor-common-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/common/1.1.17/757fda62209f6932bfdcc25d186ff3c0ad3a582b/common-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.tinkoff.kora/application-graph/1.1.17/ea1a8371909f1b26cfc1988743ce83ca33adff61/application-graph-1.1.17.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.annotation/jakarta.annotation-api/2.1.1/48b9bda22b091b1f48b13af03fe36db3be6e1ae3/jakarta.annotation-api-2.1.1.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.17.3/1d6eb3e959c737692b720d3492b2f1f34c4c8579/jackson-core-2.17.3.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.4/3864a1320d97d7b045f729a326e1e077661f31b7/reactive-streams-1.0.4.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup/javapoet/1.13.0/d6562d385049f35eb50403fa86bb11cce76b866a/javapoet-1.13.0.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/24.1.0/7af6a669488450c4a07c2c3254e2151df42d7d04/annotations-24.1.0.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.16/172931663a09a1fa515567af5fbef00897d3c04/slf4j-api-2.0.16.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.4.14/d98bc162275134cdf1518774da4a2a17ef6fb94d/logback-classic-1.4.14.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-core/1.4.14/4d3c2248219ac0effeb380ed4c5280a80bf395e8/logback-core-1.4.14.jar" />
+        </processorPath>
+        <module name="planet-user.main" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="21" />
+  </component>
+</project>

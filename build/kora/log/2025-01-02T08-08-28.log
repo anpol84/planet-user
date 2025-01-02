@@ -1,0 +1,38 @@
+20:08:28.711 INFO  [Execution worker Thread 4] r.t.k.k.a.a.p.extension.Extensions - Extensions found:
+    ru.tinkoff.kora.config.annotation.processor.extension.ConfigKoraExtension
+    ru.tinkoff.kora.json.annotation.processor.extension.JsonKoraExtension
+    ru.tinkoff.kora.http.server.annotation.processor.extension.HttpServerRequestMapperKoraExtension
+    ru.tinkoff.kora.database.annotation.processor.extension.RepositoryKoraExtension
+    ru.tinkoff.kora.database.annotation.processor.jdbc.extension.JdbcTypesExtension
+    ru.tinkoff.kora.validation.annotation.processor.extension.ValidKoraExtension
+    ru.tinkoff.kora.mapstruct.java.extension.MapstructKoraExtension
+    ru.tinkoff.grpc.client.annotation.processor.GrpcClientExtension
+
+20:08:28.753 INFO  [Execution worker Thread 4] r.t.k.k.a.a.p.KoraAppProcessor - @KoraApp processor started
+20:08:28.756 INFO  [Execution worker Thread 4] r.t.k.k.a.a.p.KoraAppProcessor - @KoraApp element found:
+    ru.planet.user.Application
+
+20:08:28.760 INFO  [Execution worker Thread 4] r.t.k.k.a.a.p.KoraAppProcessor - External modules found:
+    ru.tinkoff.kora.config.hocon.HoconConfigModule
+    ru.tinkoff.kora.config.common.CommonConfigModule
+    ru.tinkoff.kora.http.server.common.HttpServerModule
+    ru.tinkoff.kora.validation.module.ValidationModule
+    ru.tinkoff.kora.database.common.DataBaseModule
+    ru.tinkoff.kora.openapi.management.OpenApiManagementModule
+    ru.tinkoff.kora.logging.common.LoggingModule
+    ru.tinkoff.kora.http.server.common.StringParameterReadersModule
+    ru.tinkoff.kora.http.server.common.HttpServerResponseMapperModule
+    ru.tinkoff.kora.json.common.JsonCommonModule
+    ru.tinkoff.kora.database.jdbc.JdbcModule
+    ru.tinkoff.kora.http.server.undertow.UndertowHttpServerModule
+    ru.tinkoff.grpc.client.GrpcClientModule
+    ru.tinkoff.kora.http.server.common.HttpServerRequestMapperModule
+    ru.tinkoff.kora.database.jdbc.JdbcDatabaseModule
+    ru.tinkoff.kora.http.server.undertow.UndertowModule
+    ru.tinkoff.kora.validation.common.constraint.ValidatorModule
+    ru.tinkoff.kora.json.module.JsonModule
+    ru.tinkoff.kora.config.common.DefaultConfigExtractorsModule
+    ru.planet.user.Application
+    ru.tinkoff.kora.logging.logback.LogbackModule
+    ru.tinkoff.kora.netty.common.NettyCommonModule
+
