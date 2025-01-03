@@ -1,6 +1,7 @@
 package ru.planet.user.operation;
 
 import lombok.RequiredArgsConstructor;
+import ru.planet.user.exception.BusinessException;
 import ru.planet.user.helper.mapper.UserMapper;
 import ru.planet.user.model.GetUserResponse;
 import ru.planet.user.repository.UserRepository;
@@ -14,7 +15,9 @@ public class GetUserOperation {
 
     public GetUserResponse activate(long userId) {
         var user = userRepository.getUser(userId);
-        var roles = userRepository.findRoles(userId);
-        return userMapper.toGetUserResponse(user, roles);
+        if (user == null) {
+            throw new BusinessException("Пользователя с таким id не существует");
+        }
+        return userMapper.toGetUserResponse(user);
     }
 }

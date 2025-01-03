@@ -13,7 +13,6 @@ import jakarta.annotation.Nullable;
  * @param id id
  * @param login login
  * @param city city
- * @param roles roles
  */
 @ru.tinkoff.kora.common.annotation.Generated("openapi generator kora java")
 @ru.tinkoff.kora.json.common.annotation.JsonWriter
@@ -24,94 +23,16 @@ public record GetUserResponse(
   @ru.tinkoff.kora.json.common.annotation.JsonField("login")
   @Nullable String login,
   @ru.tinkoff.kora.json.common.annotation.JsonField("city")
-  @Nullable String city,
-  @ru.tinkoff.kora.json.common.annotation.JsonField("roles")
-  @Nullable java.util.List<RolesEnum> roles
+  @Nullable String city
 ){
 
   public GetUserResponse(
   ) {
-    this(null, null, null, null);
+    this(null, null, null);
   }
 
   @ru.tinkoff.kora.json.common.annotation.JsonReader
   public GetUserResponse {   }
-
-    /**
-   * Gets or Sets roles
-   */
-  @ru.tinkoff.kora.common.annotation.Generated("openapi generator kora")
-  public enum RolesEnum {
-    ADMIN("ADMIN"),
-    
-    USER("USER");
-
-    private final String value;
-
-    RolesEnum(String value) {
-      this.value = value;
-    }
-
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @ru.tinkoff.kora.common.annotation.Generated("openapi generator kora")
-    @ru.tinkoff.kora.common.Component
-    public static final class RolesEnumJsonWriter implements ru.tinkoff.kora.json.common.JsonWriter<RolesEnum> {
-      private final ru.tinkoff.kora.json.common.EnumJsonWriter<RolesEnum, String> delegate;
-
-      public RolesEnumJsonWriter(ru.tinkoff.kora.json.common.JsonWriter<String> valueWriter) {
-        this.delegate = new ru.tinkoff.kora.json.common.EnumJsonWriter<>(
-          RolesEnum.values(),
-          RolesEnum::getValue,
-          valueWriter
-        );
-      }
-
-      @Override
-      public void write(com.fasterxml.jackson.core.JsonGenerator gen, RolesEnum value) throws java.io.IOException {
-        this.delegate.write(gen, value);
-      }
-    }
-
-    @ru.tinkoff.kora.common.annotation.Generated("openapi generator kora")
-    @ru.tinkoff.kora.common.Component
-    public static final class RolesEnumJsonReader implements ru.tinkoff.kora.json.common.JsonReader<RolesEnum> {
-      private final ru.tinkoff.kora.json.common.EnumJsonReader<RolesEnum, String> delegate;
-
-      public RolesEnumJsonReader(ru.tinkoff.kora.json.common.JsonReader<String> valueReader) {
-        this.delegate = new ru.tinkoff.kora.json.common.EnumJsonReader<>(
-          RolesEnum.values(),
-          RolesEnum::getValue,
-          valueReader
-        );
-      }
-
-      @Override
-      @jakarta.annotation.Nullable
-      public RolesEnum read(com.fasterxml.jackson.core.JsonParser parser) throws java.io.IOException {
-        return this.delegate.read(parser);
-      }
-    }
-
-    @ru.tinkoff.kora.common.annotation.Generated("openapi generator kora server")
-    @ru.tinkoff.kora.common.Component
-    public static final class RolesEnumStringParameterReader implements ru.tinkoff.kora.http.server.common.handler.StringParameterReader<RolesEnum> {
-      private final ru.tinkoff.kora.http.server.common.handler.EnumStringParameterReader<RolesEnum> delegate = new ru.tinkoff.kora.http.server.common.handler.EnumStringParameterReader<>(
-        RolesEnum.values(),
-        v -> String.valueOf(v.value)
-      );
-      public RolesEnum read(String string) {
-        return this.delegate.read(string);
-      }
-    }
-  }
 
 
 
@@ -120,8 +41,7 @@ public record GetUserResponse(
     return new GetUserResponse(
       id,
       login,
-      city,
-      roles
+      city
     );
   }
 
@@ -131,8 +51,7 @@ public record GetUserResponse(
     return new GetUserResponse(
       id,
       login,
-      city,
-      roles
+      city
     );
   }
 
@@ -142,19 +61,7 @@ public record GetUserResponse(
     return new GetUserResponse(
       id,
       login,
-      city,
-      roles
-    );
-  }
-
-
-  public GetUserResponse withRoles(@Nullable java.util.List<RolesEnum> roles) {
-    if (this.roles == roles) return this;
-    return new GetUserResponse(
-      id,
-      login,
-      city,
-      roles
+      city
     );
   }
 }

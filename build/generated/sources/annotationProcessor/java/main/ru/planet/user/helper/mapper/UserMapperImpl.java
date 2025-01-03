@@ -1,22 +1,21 @@
 package ru.planet.user.helper.mapper;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.processing.Generated;
-import ru.planet.user.dto.User;
+import ru.planet.user.dto.CreateUser;
+import ru.planet.user.dto.GetUser;
 import ru.planet.user.model.ChangeUserRequest;
 import ru.planet.user.model.CreateUserRequest;
 import ru.planet.user.model.GetUserResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-01-02T20:59:36+0300",
+    date = "2025-01-03T17:35:33+0300",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.8.jar, environment: Java 21.0.2 (Eclipse Adoptium)"
 )
 public class UserMapperImpl implements UserMapper {
 
     @Override
-    public User toUserFromCreate(CreateUserRequest createUserRequest, String password) {
+    public CreateUser toUserFromCreate(CreateUserRequest createUserRequest, String password) {
         if ( createUserRequest == null && password == null ) {
             return null;
         }
@@ -30,15 +29,13 @@ public class UserMapperImpl implements UserMapper {
         String password1 = null;
         password1 = password;
 
-        Long id = null;
+        CreateUser createUser = new CreateUser( login, password1, city );
 
-        User user = new User( id, login, password1, city );
-
-        return user;
+        return createUser;
     }
 
     @Override
-    public User toUserFromUpdate(ChangeUserRequest changeUserRequest) {
+    public CreateUser toUserFromUpdate(ChangeUserRequest changeUserRequest) {
         if ( changeUserRequest == null ) {
             return null;
         }
@@ -49,46 +46,29 @@ public class UserMapperImpl implements UserMapper {
         login = changeUserRequest.login();
         city = changeUserRequest.city();
 
-        Long id = null;
         String password = null;
 
-        User user = new User( id, login, password, city );
+        CreateUser createUser = new CreateUser( login, password, city );
 
-        return user;
+        return createUser;
     }
 
     @Override
-    public GetUserResponse toGetUserResponse(User user, List<String> roles) {
-        if ( user == null && roles == null ) {
+    public GetUserResponse toGetUserResponse(GetUser user) {
+        if ( user == null ) {
             return null;
         }
 
         Long id = null;
         String login = null;
         String city = null;
-        if ( user != null ) {
-            id = user.id();
-            login = user.login();
-            city = user.city();
-        }
-        List<GetUserResponse.RolesEnum> roles1 = null;
-        roles1 = stringListToRolesEnumList( roles );
 
-        GetUserResponse getUserResponse = new GetUserResponse( id, login, city, roles1 );
+        id = user.id();
+        login = user.login();
+        city = user.city();
+
+        GetUserResponse getUserResponse = new GetUserResponse( id, login, city );
 
         return getUserResponse;
-    }
-
-    protected List<GetUserResponse.RolesEnum> stringListToRolesEnumList(List<String> list) {
-        if ( list == null ) {
-            return null;
-        }
-
-        List<GetUserResponse.RolesEnum> list1 = new ArrayList<GetUserResponse.RolesEnum>( list.size() );
-        for ( String string : list ) {
-            list1.add( Enum.valueOf( GetUserResponse.RolesEnum.class, string ) );
-        }
-
-        return list1;
     }
 }

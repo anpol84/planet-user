@@ -1,6 +1,5 @@
 package ru.planet.user.helper.interceptor;
 
-import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import lombok.RequiredArgsConstructor;
 import ru.tinkoff.kora.application.graph.GraphInterceptor;

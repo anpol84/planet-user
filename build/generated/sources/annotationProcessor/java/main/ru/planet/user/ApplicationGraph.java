@@ -25,8 +25,9 @@ import ru.planet.user.configuration.properties.$BcryptProperties_ConfigValueExtr
 import ru.planet.user.configuration.properties.BcryptProperties;
 import ru.planet.user.controller.OpenApiController;
 import ru.planet.user.controller.UserRestController;
-import ru.planet.user.dto.$User_JdbcResultSetMapper;
-import ru.planet.user.dto.User;
+import ru.planet.user.dto.$GetUser_JdbcResultSetMapper;
+import ru.planet.user.dto.CreateUser;
+import ru.planet.user.dto.GetUser;
 import ru.planet.user.exception.HttpExceptionHandler;
 import ru.planet.user.helper.OpenApiProvider;
 import ru.planet.user.helper.interceptor.AuthGrpcServiceInterceptor;
@@ -45,7 +46,9 @@ import ru.planet.user.model.CreateUserResponse;
 import ru.planet.user.model.GetUser400Response;
 import ru.planet.user.model.GetUserResponse;
 import ru.planet.user.model.UserErrorResponse;
+import ru.planet.user.operation.ChangeUserOperation;
 import ru.planet.user.operation.CreateUserOperation;
+import ru.planet.user.operation.DeleteUserOperation;
 import ru.planet.user.operation.GetUserOperation;
 import ru.planet.user.repository.$$UserRepository_Impl__AopProxy;
 import ru.planet.user.repository.$UserRepository_Impl;
@@ -72,6 +75,7 @@ import ru.tinkoff.kora.config.common.ConfigWatcher;
 import ru.tinkoff.kora.config.common.extractor.ConfigValueExtractor;
 import ru.tinkoff.kora.config.common.extractor.EnumConfigValueExtractor;
 import ru.tinkoff.kora.config.common.origin.ConfigOrigin;
+import ru.tinkoff.kora.database.common.UpdateCount;
 import ru.tinkoff.kora.database.common.telemetry.DataBaseLoggerFactory;
 import ru.tinkoff.kora.database.common.telemetry.DataBaseMetricWriterFactory;
 import ru.tinkoff.kora.database.common.telemetry.DataBaseTracerFactory;
@@ -99,7 +103,6 @@ import ru.tinkoff.kora.http.server.undertow.UndertowHttpServer;
 import ru.tinkoff.kora.http.server.undertow.UndertowPrivateApiHandler;
 import ru.tinkoff.kora.http.server.undertow.UndertowPrivateHttpServer;
 import ru.tinkoff.kora.http.server.undertow.UndertowPublicApiHandler;
-import ru.tinkoff.kora.json.common.JsonWriter;
 import ru.tinkoff.kora.json.module.http.server.JsonReaderHttpServerRequestMapper;
 import ru.tinkoff.kora.json.module.http.server.JsonWriterHttpServerResponseMapper;
 import ru.tinkoff.kora.logging.common.LoggingConfig;
@@ -199,15 +202,15 @@ public class ApplicationGraph implements Supplier<ApplicationGraphDraw> {
 
     private final Node<JdbcDatabase> component28;
 
-    private final Node<$User_JdbcResultSetMapper> component29;
+    private final Node<JdbcRowMapper<String>> component29;
 
-    private final Node<JdbcRowMapper<String>> component30;
+    private final Node<JdbcResultSetMapper<List<String>>> component30;
 
-    private final Node<JdbcResultSetMapper<List<String>>> component31;
+    private final Node<JdbcRowMapper<Long>> component31;
 
-    private final Node<JdbcRowMapper<Long>> component32;
+    private final Node<JdbcResultSetMapper<Long>> component32;
 
-    private final Node<JdbcResultSetMapper<Long>> component33;
+    private final Node<$GetUser_JdbcResultSetMapper> component33;
 
     private final Node<ILoggerFactory> component34;
 
@@ -247,119 +250,117 @@ public class ApplicationGraph implements Supplier<ApplicationGraphDraw> {
 
     private final Node<GetUserOperation> component52;
 
-    private final Node<UserRestController> component53;
+    private final Node<ChangeUserOperation> component53;
 
-    private final Node<UserApiController> component54;
+    private final Node<DeleteUserOperation> component54;
 
-    private final Node<$GetUser400Response_JsonWriter> component55;
+    private final Node<UserRestController> component55;
 
-    private final Node<JsonWriterHttpServerResponseMapper<GetUser400Response>> component56;
+    private final Node<UserApiController> component56;
 
-    private final Node<$UserErrorResponse_JsonWriter> component57;
+    private final Node<$GetUser400Response_JsonWriter> component57;
 
-    private final Node<JsonWriterHttpServerResponseMapper<UserErrorResponse>> component58;
+    private final Node<JsonWriterHttpServerResponseMapper<GetUser400Response>> component58;
 
-    private final Node<UserApiServerResponseMappers.DeleteUserApiResponseMapper> component59;
+    private final Node<$UserErrorResponse_JsonWriter> component59;
 
-    private final Node<Wrapped<XnioWorker>> component60;
+    private final Node<JsonWriterHttpServerResponseMapper<UserErrorResponse>> component60;
 
-    private final Node<BlockingRequestExecutor> component61;
+    private final Node<UserApiServerResponseMappers.DeleteUserApiResponseMapper> component61;
 
-    private final Node<HttpServerRequestHandler> component62;
+    private final Node<Wrapped<XnioWorker>> component62;
 
-    private final Node<JsonWriter<String>> component63;
+    private final Node<BlockingRequestExecutor> component63;
 
-    private final Node<GetUserResponse.RolesEnum.RolesEnumJsonWriter> component64;
+    private final Node<HttpServerRequestHandler> component64;
 
-    private final Node<JsonWriter<List<GetUserResponse.RolesEnum>>> component65;
+    private final Node<$GetUserResponse_JsonWriter> component65;
 
-    private final Node<$GetUserResponse_JsonWriter> component66;
+    private final Node<JsonWriterHttpServerResponseMapper<GetUserResponse>> component66;
 
-    private final Node<JsonWriterHttpServerResponseMapper<GetUserResponse>> component67;
+    private final Node<UserApiServerResponseMappers.GetUserApiResponseMapper> component67;
 
-    private final Node<UserApiServerResponseMappers.GetUserApiResponseMapper> component68;
+    private final Node<HttpServerRequestHandler> component68;
 
-    private final Node<HttpServerRequestHandler> component69;
+    private final Node<$CreateUserRequest_JsonReader> component69;
 
-    private final Node<$CreateUserRequest_JsonReader> component70;
+    private final Node<JsonReaderHttpServerRequestMapper<CreateUserRequest>> component70;
 
-    private final Node<JsonReaderHttpServerRequestMapper<CreateUserRequest>> component71;
+    private final Node<$CreateUserResponse_JsonWriter> component71;
 
-    private final Node<$CreateUserResponse_JsonWriter> component72;
+    private final Node<JsonWriterHttpServerResponseMapper<CreateUserResponse>> component72;
 
-    private final Node<JsonWriterHttpServerResponseMapper<CreateUserResponse>> component73;
+    private final Node<$CreateUser400Response_JsonWriter> component73;
 
-    private final Node<$CreateUser400Response_JsonWriter> component74;
+    private final Node<JsonWriterHttpServerResponseMapper<CreateUser400Response>> component74;
 
-    private final Node<JsonWriterHttpServerResponseMapper<CreateUser400Response>> component75;
+    private final Node<UserApiServerResponseMappers.CreateUserApiResponseMapper> component75;
 
-    private final Node<UserApiServerResponseMappers.CreateUserApiResponseMapper> component76;
+    private final Node<HttpServerRequestHandler> component76;
 
-    private final Node<HttpServerRequestHandler> component77;
+    private final Node<$ChangeUserRequest_JsonReader> component77;
 
-    private final Node<$ChangeUserRequest_JsonReader> component78;
+    private final Node<JsonReaderHttpServerRequestMapper<ChangeUserRequest>> component78;
 
-    private final Node<JsonReaderHttpServerRequestMapper<ChangeUserRequest>> component79;
+    private final Node<UserApiServerResponseMappers.ChangeUserApiResponseMapper> component79;
 
-    private final Node<UserApiServerResponseMappers.ChangeUserApiResponseMapper> component80;
+    private final Node<HttpServerRequestHandler> component80;
 
-    private final Node<HttpServerRequestHandler> component81;
+    private final Node<OpenApiProvider> component81;
 
-    private final Node<OpenApiProvider> component82;
+    private final Node<OpenApiController> component82;
 
-    private final Node<OpenApiController> component83;
+    private final Node<HttpServerRequestHandler> component83;
 
     private final Node<HttpServerRequestHandler> component84;
 
-    private final Node<HttpServerRequestHandler> component85;
+    private final Node<ConfigValueExtractor<List<String>>> component85;
 
-    private final Node<ConfigValueExtractor<List<String>>> component86;
+    private final Node<$OpenApiManagementConfig_SwaggerUIConfig_ConfigValueExtractor> component86;
 
-    private final Node<$OpenApiManagementConfig_SwaggerUIConfig_ConfigValueExtractor> component87;
+    private final Node<$OpenApiManagementConfig_RapidocConfig_ConfigValueExtractor> component87;
 
-    private final Node<$OpenApiManagementConfig_RapidocConfig_ConfigValueExtractor> component88;
+    private final Node<$OpenApiManagementConfig_ConfigValueExtractor> component88;
 
-    private final Node<$OpenApiManagementConfig_ConfigValueExtractor> component89;
+    private final Node<OpenApiManagementConfig> component89;
 
-    private final Node<OpenApiManagementConfig> component90;
+    private final Node<HttpServerRequestHandler> component90;
 
     private final Node<HttpServerRequestHandler> component91;
 
     private final Node<HttpServerRequestHandler> component92;
 
-    private final Node<HttpServerRequestHandler> component93;
+    private final Node<HttpExceptionHandler> component93;
 
-    private final Node<HttpExceptionHandler> component94;
+    private final Node<Slf4jHttpServerLoggerFactory> component94;
 
-    private final Node<Slf4jHttpServerLoggerFactory> component95;
+    private final Node<DefaultHttpServerTelemetryFactory> component95;
 
-    private final Node<DefaultHttpServerTelemetryFactory> component96;
+    private final Node<PublicApiHandler> component96;
 
-    private final Node<PublicApiHandler> component97;
+    private final Node<UndertowPublicApiHandler> component97;
 
-    private final Node<UndertowPublicApiHandler> component98;
+    private final Node<ByteBufferPool> component98;
 
-    private final Node<ByteBufferPool> component99;
+    private final Node<UndertowHttpServer> component99;
 
-    private final Node<UndertowHttpServer> component100;
+    private final Node<Optional<PrivateApiMetrics>> component100;
 
-    private final Node<Optional<PrivateApiMetrics>> component101;
+    private final Node<PrivateApiHandler> component101;
 
-    private final Node<PrivateApiHandler> component102;
+    private final Node<UndertowPrivateApiHandler> component102;
 
-    private final Node<UndertowPrivateApiHandler> component103;
+    private final Node<ByteBufferPool> component103;
 
-    private final Node<ByteBufferPool> component104;
+    private final Node<UndertowPrivateHttpServer> component104;
 
-    private final Node<UndertowPrivateHttpServer> component105;
+    private final Node<ConfigValueExtractor<LoggingConfig>> component105;
 
-    private final Node<ConfigValueExtractor<LoggingConfig>> component106;
+    private final Node<LoggingConfig> component106;
 
-    private final Node<LoggingConfig> component107;
+    private final Node<LoggingLevelApplier> component107;
 
-    private final Node<LoggingLevelApplier> component108;
-
-    private final Node<LoggingLevelRefresher> component109;
+    private final Node<LoggingLevelRefresher> component108;
 
     public ComponentHolder0(ApplicationGraphDraw graphDraw, $ApplicationImpl impl) {
       var map = new HashMap<String, Type>();
@@ -477,33 +478,34 @@ public class ApplicationGraph implements Supplier<ApplicationGraphDraw> {
             g.get(ApplicationGraph.holder0.component27)
           ), List.of(), component25, component27);
       var _type_of_component29 = map.get("component29");
-      component29 = graphDraw.addNode0(_type_of_component29, new Class<?>[]{}, g -> new $User_JdbcResultSetMapper(), List.of());
+      component29 = graphDraw.addNode0(_type_of_component29, new Class<?>[]{}, g -> impl.stringJdbcRowMapper(), List.of());
       var _type_of_component30 = map.get("component30");
-      component30 = graphDraw.addNode0(_type_of_component30, new Class<?>[]{}, g -> impl.stringJdbcRowMapper(), List.of());
+      component30 = graphDraw.addNode0(_type_of_component30, new Class<?>[]{}, g -> JdbcResultSetMapper.listResultSetMapper(
+            g.get(ApplicationGraph.holder0.component29)
+          ), List.of(), component29);
       var _type_of_component31 = map.get("component31");
-      component31 = graphDraw.addNode0(_type_of_component31, new Class<?>[]{}, g -> JdbcResultSetMapper.listResultSetMapper(
-            g.get(ApplicationGraph.holder0.component30)
-          ), List.of(), component30);
+      component31 = graphDraw.addNode0(_type_of_component31, new Class<?>[]{}, g -> impl.longJdbcRowMapper(), List.of());
       var _type_of_component32 = map.get("component32");
-      component32 = graphDraw.addNode0(_type_of_component32, new Class<?>[]{}, g -> impl.longJdbcRowMapper(), List.of());
+      component32 = graphDraw.addNode0(_type_of_component32, new Class<?>[]{}, g -> JdbcResultSetMapper.singleResultSetMapper(
+            g.get(ApplicationGraph.holder0.component31)
+          ), List.of(), component31);
       var _type_of_component33 = map.get("component33");
-      component33 = graphDraw.addNode0(_type_of_component33, new Class<?>[]{}, g -> JdbcResultSetMapper.singleResultSetMapper(
-            g.get(ApplicationGraph.holder0.component32)
-          ), List.of(), component32);
+      component33 = graphDraw.addNode0(_type_of_component33, new Class<?>[]{}, g -> new $GetUser_JdbcResultSetMapper(), List.of());
       var _type_of_component34 = map.get("component34");
       component34 = graphDraw.addNode0(_type_of_component34, new Class<?>[]{}, g -> impl.loggerFactory(), List.of());
       var _type_of_component35 = map.get("component35");
       component35 = graphDraw.addNode0(_type_of_component35, new Class<?>[]{}, g -> new $$UserRepository_Impl__AopProxy(
             g.get(ApplicationGraph.holder0.component28),
-            g.get(ApplicationGraph.holder0.component29),
-            g.get(ApplicationGraph.holder0.component31),
+            g.get(ApplicationGraph.holder0.component30),
+            g.get(ApplicationGraph.holder0.component32),
             g.get(ApplicationGraph.holder0.component33),
             g.get(ApplicationGraph.holder0.component34),
-            (StructuredArgumentMapper<String>) null,
-            (StructuredArgumentMapper<User>) null,
             (StructuredArgumentMapper<Long>) null,
-            (StructuredArgumentMapper<List<String>>) null
-          ), List.of(), component28, component29, component31, component33, component34);
+            (StructuredArgumentMapper<List<String>>) null,
+            (StructuredArgumentMapper<CreateUser>) null,
+            (StructuredArgumentMapper<GetUser>) null,
+            (StructuredArgumentMapper<UpdateCount>) null
+          ), List.of(), component28, component30, component32, component33, component34);
       var _type_of_component36 = map.get("component36");
       component36 = graphDraw.addNode0(_type_of_component36, new Class<?>[]{}, g -> new AuthGrpcServiceInterceptor(), List.of());
       var _type_of_component37 = map.get("component37");
@@ -585,261 +587,260 @@ public class ApplicationGraph implements Supplier<ApplicationGraphDraw> {
             g.get(ApplicationGraph.holder0.component20)
           ), List.of(), component35, component20);
       var _type_of_component53 = map.get("component53");
-      component53 = graphDraw.addNode0(_type_of_component53, new Class<?>[]{}, g -> new UserRestController(
-            g.get(ApplicationGraph.holder0.component51),
-            g.get(ApplicationGraph.holder0.component52)
-          ), List.of(), component51, component52);
+      component53 = graphDraw.addNode0(_type_of_component53, new Class<?>[]{}, g -> new ChangeUserOperation(
+            g.get(ApplicationGraph.holder0.component35),
+            g.get(ApplicationGraph.holder0.component20)
+          ), List.of(), component35, component20);
       var _type_of_component54 = map.get("component54");
-      component54 = graphDraw.addNode0(_type_of_component54, new Class<?>[]{}, g -> new UserApiController(
-            g.get(ApplicationGraph.holder0.component53)
-          ), List.of(), component53);
+      component54 = graphDraw.addNode0(_type_of_component54, new Class<?>[]{}, g -> new DeleteUserOperation(
+            g.get(ApplicationGraph.holder0.component35)
+          ), List.of(), component35);
       var _type_of_component55 = map.get("component55");
-      component55 = graphDraw.addNode0(_type_of_component55, new Class<?>[]{}, g -> new $GetUser400Response_JsonWriter(), List.of());
+      component55 = graphDraw.addNode0(_type_of_component55, new Class<?>[]{}, g -> new UserRestController(
+            g.get(ApplicationGraph.holder0.component51),
+            g.get(ApplicationGraph.holder0.component52),
+            g.get(ApplicationGraph.holder0.component53),
+            g.get(ApplicationGraph.holder0.component54)
+          ), List.of(), component51, component52, component53, component54);
       var _type_of_component56 = map.get("component56");
-      component56 = graphDraw.addNode0(_type_of_component56, new Class<?>[]{ru.tinkoff.kora.json.common.annotation.Json.class, }, g -> impl.<GetUser400Response>jsonResponseMapper(
+      component56 = graphDraw.addNode0(_type_of_component56, new Class<?>[]{}, g -> new UserApiController(
             g.get(ApplicationGraph.holder0.component55)
           ), List.of(), component55);
       var _type_of_component57 = map.get("component57");
-      component57 = graphDraw.addNode0(_type_of_component57, new Class<?>[]{}, g -> new $UserErrorResponse_JsonWriter(), List.of());
+      component57 = graphDraw.addNode0(_type_of_component57, new Class<?>[]{}, g -> new $GetUser400Response_JsonWriter(), List.of());
       var _type_of_component58 = map.get("component58");
-      component58 = graphDraw.addNode0(_type_of_component58, new Class<?>[]{ru.tinkoff.kora.json.common.annotation.Json.class, }, g -> impl.<UserErrorResponse>jsonResponseMapper(
+      component58 = graphDraw.addNode0(_type_of_component58, new Class<?>[]{ru.tinkoff.kora.json.common.annotation.Json.class, }, g -> impl.<GetUser400Response>jsonResponseMapper(
             g.get(ApplicationGraph.holder0.component57)
           ), List.of(), component57);
       var _type_of_component59 = map.get("component59");
-      component59 = graphDraw.addNode0(_type_of_component59, new Class<?>[]{}, g -> new UserApiServerResponseMappers.DeleteUserApiResponseMapper(
-            g.get(ApplicationGraph.holder0.component56),
-            g.get(ApplicationGraph.holder0.component58)
-          ), List.of(), component56, component58);
+      component59 = graphDraw.addNode0(_type_of_component59, new Class<?>[]{}, g -> new $UserErrorResponse_JsonWriter(), List.of());
       var _type_of_component60 = map.get("component60");
-      component60 = graphDraw.addNode0(_type_of_component60, new Class<?>[]{io.undertow.Undertow.class, }, g -> impl.xnioWorker(
+      component60 = graphDraw.addNode0(_type_of_component60, new Class<?>[]{ru.tinkoff.kora.json.common.annotation.Json.class, }, g -> impl.<UserErrorResponse>jsonResponseMapper(
+            g.get(ApplicationGraph.holder0.component59)
+          ), List.of(), component59);
+      var _type_of_component61 = map.get("component61");
+      component61 = graphDraw.addNode0(_type_of_component61, new Class<?>[]{}, g -> new UserApiServerResponseMappers.DeleteUserApiResponseMapper(
+            g.get(ApplicationGraph.holder0.component58),
+            g.get(ApplicationGraph.holder0.component60)
+          ), List.of(), component58, component60);
+      var _type_of_component62 = map.get("component62");
+      component62 = graphDraw.addNode0(_type_of_component62, new Class<?>[]{io.undertow.Undertow.class, }, g -> impl.xnioWorker(
             g.valueOf(ApplicationGraph.holder0.component19).map(v -> (HttpServerConfig) v)
           ), List.of(), component19.valueOf());
-      var _type_of_component61 = map.get("component61");
-      component61 = graphDraw.addNode0(_type_of_component61, new Class<?>[]{}, g -> impl.undertowBlockingRequestExecutor(
-            g.get(ApplicationGraph.holder0.component60).value()
-          ), List.of(), component60);
-      var _type_of_component62 = map.get("component62");
-      component62 = graphDraw.addNode0(_type_of_component62, new Class<?>[]{}, g -> impl.module0.delete_api_users_userId(
-            g.get(ApplicationGraph.holder0.component54),
-            g.get(ApplicationGraph.holder0.component59),
-            g.get(ApplicationGraph.holder0.component61)
-          ), List.of(), component54, component59, component61);
       var _type_of_component63 = map.get("component63");
-      component63 = graphDraw.addNode0(_type_of_component63, new Class<?>[]{}, g -> impl.stringJsonWriter(), List.of());
+      component63 = graphDraw.addNode0(_type_of_component63, new Class<?>[]{}, g -> impl.undertowBlockingRequestExecutor(
+            g.get(ApplicationGraph.holder0.component62).value()
+          ), List.of(), component62);
       var _type_of_component64 = map.get("component64");
-      component64 = graphDraw.addNode0(_type_of_component64, new Class<?>[]{}, g -> new GetUserResponse.RolesEnum.RolesEnumJsonWriter(
+      component64 = graphDraw.addNode0(_type_of_component64, new Class<?>[]{}, g -> impl.module0.delete_api_users_userId(
+            g.get(ApplicationGraph.holder0.component56),
+            g.get(ApplicationGraph.holder0.component61),
             g.get(ApplicationGraph.holder0.component63)
-          ), List.of(), component63);
+          ), List.of(), component56, component61, component63);
       var _type_of_component65 = map.get("component65");
-      component65 = graphDraw.addNode0(_type_of_component65, new Class<?>[]{}, g -> impl.<GetUserResponse.RolesEnum>listJsonWriterFactory(
-            g.get(ApplicationGraph.holder0.component64)
-          ), List.of(), component64);
+      component65 = graphDraw.addNode0(_type_of_component65, new Class<?>[]{}, g -> new $GetUserResponse_JsonWriter(), List.of());
       var _type_of_component66 = map.get("component66");
-      component66 = graphDraw.addNode0(_type_of_component66, new Class<?>[]{}, g -> new $GetUserResponse_JsonWriter(
+      component66 = graphDraw.addNode0(_type_of_component66, new Class<?>[]{ru.tinkoff.kora.json.common.annotation.Json.class, }, g -> impl.<GetUserResponse>jsonResponseMapper(
             g.get(ApplicationGraph.holder0.component65)
           ), List.of(), component65);
       var _type_of_component67 = map.get("component67");
-      component67 = graphDraw.addNode0(_type_of_component67, new Class<?>[]{ru.tinkoff.kora.json.common.annotation.Json.class, }, g -> impl.<GetUserResponse>jsonResponseMapper(
-            g.get(ApplicationGraph.holder0.component66)
-          ), List.of(), component66);
+      component67 = graphDraw.addNode0(_type_of_component67, new Class<?>[]{}, g -> new UserApiServerResponseMappers.GetUserApiResponseMapper(
+            g.get(ApplicationGraph.holder0.component66),
+            g.get(ApplicationGraph.holder0.component58),
+            g.get(ApplicationGraph.holder0.component60)
+          ), List.of(), component66, component58, component60);
       var _type_of_component68 = map.get("component68");
-      component68 = graphDraw.addNode0(_type_of_component68, new Class<?>[]{}, g -> new UserApiServerResponseMappers.GetUserApiResponseMapper(
+      component68 = graphDraw.addNode0(_type_of_component68, new Class<?>[]{}, g -> impl.module0.get_api_users_userId(
+            g.get(ApplicationGraph.holder0.component56),
             g.get(ApplicationGraph.holder0.component67),
-            g.get(ApplicationGraph.holder0.component56),
-            g.get(ApplicationGraph.holder0.component58)
-          ), List.of(), component67, component56, component58);
+            g.get(ApplicationGraph.holder0.component63)
+          ), List.of(), component56, component67, component63);
       var _type_of_component69 = map.get("component69");
-      component69 = graphDraw.addNode0(_type_of_component69, new Class<?>[]{}, g -> impl.module0.get_api_users_userId(
-            g.get(ApplicationGraph.holder0.component54),
-            g.get(ApplicationGraph.holder0.component68),
-            g.get(ApplicationGraph.holder0.component61)
-          ), List.of(), component54, component68, component61);
+      component69 = graphDraw.addNode0(_type_of_component69, new Class<?>[]{}, g -> new $CreateUserRequest_JsonReader(), List.of());
       var _type_of_component70 = map.get("component70");
-      component70 = graphDraw.addNode0(_type_of_component70, new Class<?>[]{}, g -> new $CreateUserRequest_JsonReader(), List.of());
+      component70 = graphDraw.addNode0(_type_of_component70, new Class<?>[]{ru.tinkoff.kora.json.common.annotation.Json.class, }, g -> impl.<CreateUserRequest>jsonRequestMapper(
+            g.get(ApplicationGraph.holder0.component69)
+          ), List.of(), component69);
       var _type_of_component71 = map.get("component71");
-      component71 = graphDraw.addNode0(_type_of_component71, new Class<?>[]{ru.tinkoff.kora.json.common.annotation.Json.class, }, g -> impl.<CreateUserRequest>jsonRequestMapper(
-            g.get(ApplicationGraph.holder0.component70)
-          ), List.of(), component70);
+      component71 = graphDraw.addNode0(_type_of_component71, new Class<?>[]{}, g -> new $CreateUserResponse_JsonWriter(), List.of());
       var _type_of_component72 = map.get("component72");
-      component72 = graphDraw.addNode0(_type_of_component72, new Class<?>[]{}, g -> new $CreateUserResponse_JsonWriter(), List.of());
+      component72 = graphDraw.addNode0(_type_of_component72, new Class<?>[]{ru.tinkoff.kora.json.common.annotation.Json.class, }, g -> impl.<CreateUserResponse>jsonResponseMapper(
+            g.get(ApplicationGraph.holder0.component71)
+          ), List.of(), component71);
       var _type_of_component73 = map.get("component73");
-      component73 = graphDraw.addNode0(_type_of_component73, new Class<?>[]{ru.tinkoff.kora.json.common.annotation.Json.class, }, g -> impl.<CreateUserResponse>jsonResponseMapper(
-            g.get(ApplicationGraph.holder0.component72)
-          ), List.of(), component72);
+      component73 = graphDraw.addNode0(_type_of_component73, new Class<?>[]{}, g -> new $CreateUser400Response_JsonWriter(), List.of());
       var _type_of_component74 = map.get("component74");
-      component74 = graphDraw.addNode0(_type_of_component74, new Class<?>[]{}, g -> new $CreateUser400Response_JsonWriter(), List.of());
+      component74 = graphDraw.addNode0(_type_of_component74, new Class<?>[]{ru.tinkoff.kora.json.common.annotation.Json.class, }, g -> impl.<CreateUser400Response>jsonResponseMapper(
+            g.get(ApplicationGraph.holder0.component73)
+          ), List.of(), component73);
       var _type_of_component75 = map.get("component75");
-      component75 = graphDraw.addNode0(_type_of_component75, new Class<?>[]{ru.tinkoff.kora.json.common.annotation.Json.class, }, g -> impl.<CreateUser400Response>jsonResponseMapper(
-            g.get(ApplicationGraph.holder0.component74)
-          ), List.of(), component74);
+      component75 = graphDraw.addNode0(_type_of_component75, new Class<?>[]{}, g -> new UserApiServerResponseMappers.CreateUserApiResponseMapper(
+            g.get(ApplicationGraph.holder0.component72),
+            g.get(ApplicationGraph.holder0.component74),
+            g.get(ApplicationGraph.holder0.component60)
+          ), List.of(), component72, component74, component60);
       var _type_of_component76 = map.get("component76");
-      component76 = graphDraw.addNode0(_type_of_component76, new Class<?>[]{}, g -> new UserApiServerResponseMappers.CreateUserApiResponseMapper(
-            g.get(ApplicationGraph.holder0.component73),
-            g.get(ApplicationGraph.holder0.component75),
-            g.get(ApplicationGraph.holder0.component58)
-          ), List.of(), component73, component75, component58);
-      var _type_of_component77 = map.get("component77");
-      component77 = graphDraw.addNode0(_type_of_component77, new Class<?>[]{}, g -> impl.module0.post_api_users(
-            g.get(ApplicationGraph.holder0.component54),
-            g.get(ApplicationGraph.holder0.component71),
-            g.get(ApplicationGraph.holder0.component76),
-            g.get(ApplicationGraph.holder0.component61)
-          ), List.of(), component54, component71, component76, component61);
-      var _type_of_component78 = map.get("component78");
-      component78 = graphDraw.addNode0(_type_of_component78, new Class<?>[]{}, g -> new $ChangeUserRequest_JsonReader(), List.of());
-      var _type_of_component79 = map.get("component79");
-      component79 = graphDraw.addNode0(_type_of_component79, new Class<?>[]{ru.tinkoff.kora.json.common.annotation.Json.class, }, g -> impl.<ChangeUserRequest>jsonRequestMapper(
-            g.get(ApplicationGraph.holder0.component78)
-          ), List.of(), component78);
-      var _type_of_component80 = map.get("component80");
-      component80 = graphDraw.addNode0(_type_of_component80, new Class<?>[]{}, g -> new UserApiServerResponseMappers.ChangeUserApiResponseMapper(
+      component76 = graphDraw.addNode0(_type_of_component76, new Class<?>[]{}, g -> impl.module0.post_api_users(
             g.get(ApplicationGraph.holder0.component56),
-            g.get(ApplicationGraph.holder0.component58)
-          ), List.of(), component56, component58);
-      var _type_of_component81 = map.get("component81");
-      component81 = graphDraw.addNode0(_type_of_component81, new Class<?>[]{}, g -> impl.module0.put_api_users_userId(
-            g.get(ApplicationGraph.holder0.component54),
+            g.get(ApplicationGraph.holder0.component70),
+            g.get(ApplicationGraph.holder0.component75),
+            g.get(ApplicationGraph.holder0.component63)
+          ), List.of(), component56, component70, component75, component63);
+      var _type_of_component77 = map.get("component77");
+      component77 = graphDraw.addNode0(_type_of_component77, new Class<?>[]{}, g -> new $ChangeUserRequest_JsonReader(), List.of());
+      var _type_of_component78 = map.get("component78");
+      component78 = graphDraw.addNode0(_type_of_component78, new Class<?>[]{ru.tinkoff.kora.json.common.annotation.Json.class, }, g -> impl.<ChangeUserRequest>jsonRequestMapper(
+            g.get(ApplicationGraph.holder0.component77)
+          ), List.of(), component77);
+      var _type_of_component79 = map.get("component79");
+      component79 = graphDraw.addNode0(_type_of_component79, new Class<?>[]{}, g -> new UserApiServerResponseMappers.ChangeUserApiResponseMapper(
+            g.get(ApplicationGraph.holder0.component58),
+            g.get(ApplicationGraph.holder0.component60)
+          ), List.of(), component58, component60);
+      var _type_of_component80 = map.get("component80");
+      component80 = graphDraw.addNode0(_type_of_component80, new Class<?>[]{}, g -> impl.module0.put_api_users_userId(
+            g.get(ApplicationGraph.holder0.component56),
+            g.get(ApplicationGraph.holder0.component78),
             g.get(ApplicationGraph.holder0.component79),
-            g.get(ApplicationGraph.holder0.component80),
-            g.get(ApplicationGraph.holder0.component61)
-          ), List.of(), component54, component79, component80, component61);
-      var _type_of_component82 = map.get("component82");
-      component82 = graphDraw.addNode0(_type_of_component82, new Class<?>[]{}, g -> new OpenApiProvider(
+            g.get(ApplicationGraph.holder0.component63)
+          ), List.of(), component56, component78, component79, component63);
+      var _type_of_component81 = map.get("component81");
+      component81 = graphDraw.addNode0(_type_of_component81, new Class<?>[]{}, g -> new OpenApiProvider(
             g.get(ApplicationGraph.holder0.component6)
           ), List.of(), component6);
+      var _type_of_component82 = map.get("component82");
+      component82 = graphDraw.addNode0(_type_of_component82, new Class<?>[]{}, g -> new OpenApiController(
+            g.get(ApplicationGraph.holder0.component81)
+          ), List.of(), component81);
       var _type_of_component83 = map.get("component83");
-      component83 = graphDraw.addNode0(_type_of_component83, new Class<?>[]{}, g -> new OpenApiController(
-            g.get(ApplicationGraph.holder0.component82)
-          ), List.of(), component82);
+      component83 = graphDraw.addNode0(_type_of_component83, new Class<?>[]{}, g -> impl.module2.get_docs_openapi_yaml(
+            g.get(ApplicationGraph.holder0.component82),
+            g.get(ApplicationGraph.holder0.component63)
+          ), List.of(), component82, component63);
       var _type_of_component84 = map.get("component84");
-      component84 = graphDraw.addNode0(_type_of_component84, new Class<?>[]{}, g -> impl.module2.get_docs_openapi_yaml(
-            g.get(ApplicationGraph.holder0.component83),
-            g.get(ApplicationGraph.holder0.component61)
-          ), List.of(), component83, component61);
+      component84 = graphDraw.addNode0(_type_of_component84, new Class<?>[]{}, g -> impl.module2.options_(
+            g.get(ApplicationGraph.holder0.component82),
+            g.get(ApplicationGraph.holder0.component63)
+          ), List.of(), component82, component63);
       var _type_of_component85 = map.get("component85");
-      component85 = graphDraw.addNode0(_type_of_component85, new Class<?>[]{}, g -> impl.module2.options_(
-            g.get(ApplicationGraph.holder0.component83),
-            g.get(ApplicationGraph.holder0.component61)
-          ), List.of(), component83, component61);
-      var _type_of_component86 = map.get("component86");
-      component86 = graphDraw.addNode0(_type_of_component86, new Class<?>[]{}, g -> impl.<String>listConfigValueExtractor(
+      component85 = graphDraw.addNode0(_type_of_component85, new Class<?>[]{}, g -> impl.<String>listConfigValueExtractor(
             g.get(ApplicationGraph.holder0.component10)
           ), List.of(), component10);
+      var _type_of_component86 = map.get("component86");
+      component86 = graphDraw.addNode0(_type_of_component86, new Class<?>[]{}, g -> new $OpenApiManagementConfig_SwaggerUIConfig_ConfigValueExtractor(), List.of());
       var _type_of_component87 = map.get("component87");
-      component87 = graphDraw.addNode0(_type_of_component87, new Class<?>[]{}, g -> new $OpenApiManagementConfig_SwaggerUIConfig_ConfigValueExtractor(), List.of());
+      component87 = graphDraw.addNode0(_type_of_component87, new Class<?>[]{}, g -> new $OpenApiManagementConfig_RapidocConfig_ConfigValueExtractor(), List.of());
       var _type_of_component88 = map.get("component88");
-      component88 = graphDraw.addNode0(_type_of_component88, new Class<?>[]{}, g -> new $OpenApiManagementConfig_RapidocConfig_ConfigValueExtractor(), List.of());
-      var _type_of_component89 = map.get("component89");
-      component89 = graphDraw.addNode0(_type_of_component89, new Class<?>[]{}, g -> new $OpenApiManagementConfig_ConfigValueExtractor(
+      component88 = graphDraw.addNode0(_type_of_component88, new Class<?>[]{}, g -> new $OpenApiManagementConfig_ConfigValueExtractor(
+            g.get(ApplicationGraph.holder0.component85),
             g.get(ApplicationGraph.holder0.component86),
-            g.get(ApplicationGraph.holder0.component87),
-            g.get(ApplicationGraph.holder0.component88)
-          ), List.of(), component86, component87, component88);
-      var _type_of_component90 = map.get("component90");
-      component90 = graphDraw.addNode0(_type_of_component90, new Class<?>[]{}, g -> impl.openApiManagementConfig(
+            g.get(ApplicationGraph.holder0.component87)
+          ), List.of(), component85, component86, component87);
+      var _type_of_component89 = map.get("component89");
+      component89 = graphDraw.addNode0(_type_of_component89, new Class<?>[]{}, g -> impl.openApiManagementConfig(
             g.get(ApplicationGraph.holder0.component8),
+            g.get(ApplicationGraph.holder0.component88)
+          ), List.of(), component8, component88);
+      var _type_of_component90 = map.get("component90");
+      component90 = graphDraw.addNode0(_type_of_component90, new Class<?>[]{}, g -> impl.openApiManagementController(
             g.get(ApplicationGraph.holder0.component89)
-          ), List.of(), component8, component89);
+          ), List.of(), component89);
       var _type_of_component91 = map.get("component91");
-      component91 = graphDraw.addNode0(_type_of_component91, new Class<?>[]{}, g -> impl.openApiManagementController(
-            g.get(ApplicationGraph.holder0.component90)
-          ), List.of(), component90);
+      component91 = graphDraw.addNode0(_type_of_component91, new Class<?>[]{}, g -> impl.rapidocManagementController(
+            g.get(ApplicationGraph.holder0.component89)
+          ), List.of(), component89);
       var _type_of_component92 = map.get("component92");
-      component92 = graphDraw.addNode0(_type_of_component92, new Class<?>[]{}, g -> impl.rapidocManagementController(
-            g.get(ApplicationGraph.holder0.component90)
-          ), List.of(), component90);
+      component92 = graphDraw.addNode0(_type_of_component92, new Class<?>[]{}, g -> impl.swaggerUIManagementController(
+            g.get(ApplicationGraph.holder0.component89)
+          ), List.of(), component89);
       var _type_of_component93 = map.get("component93");
-      component93 = graphDraw.addNode0(_type_of_component93, new Class<?>[]{}, g -> impl.swaggerUIManagementController(
-            g.get(ApplicationGraph.holder0.component90)
-          ), List.of(), component90);
-      var _type_of_component94 = map.get("component94");
-      component94 = graphDraw.addNode0(_type_of_component94, new Class<?>[]{ru.tinkoff.kora.http.server.common.HttpServerModule.class, }, g -> new HttpExceptionHandler(
-            g.get(ApplicationGraph.holder0.component57),
+      component93 = graphDraw.addNode0(_type_of_component93, new Class<?>[]{ru.tinkoff.kora.http.server.common.HttpServerModule.class, }, g -> new HttpExceptionHandler(
+            g.get(ApplicationGraph.holder0.component59),
             g.get(ApplicationGraph.holder0.component48)
-          ), List.of(), component57, component48);
+          ), List.of(), component59, component48);
+      var _type_of_component94 = map.get("component94");
+      component94 = graphDraw.addNode0(_type_of_component94, new Class<?>[]{}, g -> impl.slf4jHttpServerLoggerFactory(), List.of());
       var _type_of_component95 = map.get("component95");
-      component95 = graphDraw.addNode0(_type_of_component95, new Class<?>[]{}, g -> impl.slf4jHttpServerLoggerFactory(), List.of());
-      var _type_of_component96 = map.get("component96");
-      component96 = graphDraw.addNode0(_type_of_component96, new Class<?>[]{}, g -> impl.defaultHttpServerTelemetryFactory(
-            g.get(ApplicationGraph.holder0.component95),
+      component95 = graphDraw.addNode0(_type_of_component95, new Class<?>[]{}, g -> impl.defaultHttpServerTelemetryFactory(
+            g.get(ApplicationGraph.holder0.component94),
             (HttpServerMetricsFactory) null,
             (HttpServerTracerFactory) null
-          ), List.of(), component95);
-      var _type_of_component97 = map.get("component97");
-      component97 = graphDraw.addNode0(_type_of_component97, new Class<?>[]{}, g -> impl.publicApiHandler(
+          ), List.of(), component94);
+      var _type_of_component96 = map.get("component96");
+      component96 = graphDraw.addNode0(_type_of_component96, new Class<?>[]{}, g -> impl.publicApiHandler(
             All.of(
-              g.get(ApplicationGraph.holder0.component62),
-              g.get(ApplicationGraph.holder0.component69),
-              g.get(ApplicationGraph.holder0.component77),
-              g.get(ApplicationGraph.holder0.component81),
+              g.get(ApplicationGraph.holder0.component64),
+              g.get(ApplicationGraph.holder0.component68),
+              g.get(ApplicationGraph.holder0.component76),
+              g.get(ApplicationGraph.holder0.component80),
+              g.get(ApplicationGraph.holder0.component83),
               g.get(ApplicationGraph.holder0.component84),
-              g.get(ApplicationGraph.holder0.component85),
+              g.get(ApplicationGraph.holder0.component90),
               g.get(ApplicationGraph.holder0.component91),
-              g.get(ApplicationGraph.holder0.component92),
+              g.get(ApplicationGraph.holder0.component92)
+              ),
+            All.of(
               g.get(ApplicationGraph.holder0.component93)
               ),
-            All.of(
-              g.get(ApplicationGraph.holder0.component94)
-              ),
-            g.get(ApplicationGraph.holder0.component96),
+            g.get(ApplicationGraph.holder0.component95),
             g.get(ApplicationGraph.holder0.component19)
-          ), List.of(), component62, component69, component77, component81, component84, component85, component91, component92, component93, component94, component96, component19);
-      var _type_of_component98 = map.get("component98");
-      component98 = graphDraw.addNode0(_type_of_component98, new Class<?>[]{}, g -> impl.undertowPublicApiHandler(
-            g.get(ApplicationGraph.holder0.component97),
+          ), List.of(), component64, component68, component76, component80, component83, component84, component90, component91, component92, component93, component95, component19);
+      var _type_of_component97 = map.get("component97");
+      component97 = graphDraw.addNode0(_type_of_component97, new Class<?>[]{}, g -> impl.undertowPublicApiHandler(
+            g.get(ApplicationGraph.holder0.component96),
             (HttpServerTracerFactory) null,
             g.get(ApplicationGraph.holder0.component19)
-          ), List.of(), component97, component19);
+          ), List.of(), component96, component19);
+      var _type_of_component98 = map.get("component98");
+      component98 = graphDraw.addNode0(_type_of_component98, new Class<?>[]{io.undertow.Undertow.class, }, g -> impl.undertowPublicByteBufferPool(), List.of());
       var _type_of_component99 = map.get("component99");
-      component99 = graphDraw.addNode0(_type_of_component99, new Class<?>[]{io.undertow.Undertow.class, }, g -> impl.undertowPublicByteBufferPool(), List.of());
-      var _type_of_component100 = map.get("component100");
-      component100 = graphDraw.addNode0(_type_of_component100, new Class<?>[]{}, g -> impl.undertowHttpServer(
+      component99 = graphDraw.addNode0(_type_of_component99, new Class<?>[]{}, g -> impl.undertowHttpServer(
             g.valueOf(ApplicationGraph.holder0.component19).map(v -> (HttpServerConfig) v),
-            g.valueOf(ApplicationGraph.holder0.component98).map(v -> (UndertowPublicApiHandler) v),
-            g.get(ApplicationGraph.holder0.component60).value(),
-            g.get(ApplicationGraph.holder0.component99)
-          ), List.of(), component19.valueOf(), component98.valueOf(), component60, component99);
-      var _type_of_component101 = map.get("component101");
-      component101 = graphDraw.addNode0(_type_of_component101, new Class<?>[]{}, g -> Optional.<PrivateApiMetrics>ofNullable(
+            g.valueOf(ApplicationGraph.holder0.component97).map(v -> (UndertowPublicApiHandler) v),
+            g.get(ApplicationGraph.holder0.component62).value(),
+            g.get(ApplicationGraph.holder0.component98)
+          ), List.of(), component19.valueOf(), component97.valueOf(), component62, component98);
+      var _type_of_component100 = map.get("component100");
+      component100 = graphDraw.addNode0(_type_of_component100, new Class<?>[]{}, g -> Optional.<PrivateApiMetrics>ofNullable(
             (PrivateApiMetrics) null
           ), List.of());
-      var _type_of_component102 = map.get("component102");
-      component102 = graphDraw.addNode0(_type_of_component102, new Class<?>[]{}, g -> impl.privateApiHandler(
+      var _type_of_component101 = map.get("component101");
+      component101 = graphDraw.addNode0(_type_of_component101, new Class<?>[]{}, g -> impl.privateApiHandler(
             g.valueOf(ApplicationGraph.holder0.component19).map(v -> (HttpServerConfig) v),
-            g.valueOf(ApplicationGraph.holder0.component101).map(v -> (Optional<PrivateApiMetrics>) v),
+            g.valueOf(ApplicationGraph.holder0.component100).map(v -> (Optional<PrivateApiMetrics>) v),
             All.of(
               g.promiseOf(ApplicationGraph.holder0.component28).map(v -> (ReadinessProbe) v),
-              g.promiseOf(ApplicationGraph.holder0.component100).map(v -> (ReadinessProbe) v)
+              g.promiseOf(ApplicationGraph.holder0.component99).map(v -> (ReadinessProbe) v)
               ),
             All.of(  )
-          ), List.of(), component19.valueOf(), component101.valueOf());
+          ), List.of(), component19.valueOf(), component100.valueOf());
+      var _type_of_component102 = map.get("component102");
+      component102 = graphDraw.addNode0(_type_of_component102, new Class<?>[]{}, g -> impl.undertowPrivateApiHandler(
+            g.get(ApplicationGraph.holder0.component101)
+          ), List.of(), component101);
       var _type_of_component103 = map.get("component103");
-      component103 = graphDraw.addNode0(_type_of_component103, new Class<?>[]{}, g -> impl.undertowPrivateApiHandler(
-            g.get(ApplicationGraph.holder0.component102)
-          ), List.of(), component102);
+      component103 = graphDraw.addNode0(_type_of_component103, new Class<?>[]{ru.tinkoff.kora.http.server.undertow.UndertowPrivateHttpServer.class, }, g -> impl.undertowPrivateByteBufferPool(), List.of());
       var _type_of_component104 = map.get("component104");
-      component104 = graphDraw.addNode0(_type_of_component104, new Class<?>[]{ru.tinkoff.kora.http.server.undertow.UndertowPrivateHttpServer.class, }, g -> impl.undertowPrivateByteBufferPool(), List.of());
-      var _type_of_component105 = map.get("component105");
-      component105 = graphDraw.addNode0(_type_of_component105, new Class<?>[]{}, g -> impl.undertowPrivateHttpServer(
+      component104 = graphDraw.addNode0(_type_of_component104, new Class<?>[]{}, g -> impl.undertowPrivateHttpServer(
             g.valueOf(ApplicationGraph.holder0.component19).map(v -> (HttpServerConfig) v),
-            g.valueOf(ApplicationGraph.holder0.component103).map(v -> (UndertowPrivateApiHandler) v),
-            g.get(ApplicationGraph.holder0.component60).value(),
-            g.get(ApplicationGraph.holder0.component104)
-          ), List.of(), component19.valueOf(), component103.valueOf(), component60, component104);
+            g.valueOf(ApplicationGraph.holder0.component102).map(v -> (UndertowPrivateApiHandler) v),
+            g.get(ApplicationGraph.holder0.component62).value(),
+            g.get(ApplicationGraph.holder0.component103)
+          ), List.of(), component19.valueOf(), component102.valueOf(), component62, component103);
+      var _type_of_component105 = map.get("component105");
+      component105 = graphDraw.addNode0(_type_of_component105, new Class<?>[]{}, g -> impl.loggingLevelConfigValueExtractor(), List.of());
       var _type_of_component106 = map.get("component106");
-      component106 = graphDraw.addNode0(_type_of_component106, new Class<?>[]{}, g -> impl.loggingLevelConfigValueExtractor(), List.of());
-      var _type_of_component107 = map.get("component107");
-      component107 = graphDraw.addNode0(_type_of_component107, new Class<?>[]{}, g -> impl.loggingConfig(
+      component106 = graphDraw.addNode0(_type_of_component106, new Class<?>[]{}, g -> impl.loggingConfig(
             g.get(ApplicationGraph.holder0.component8),
-            g.get(ApplicationGraph.holder0.component106)
-          ), List.of(), component8, component106);
+            g.get(ApplicationGraph.holder0.component105)
+          ), List.of(), component8, component105);
+      var _type_of_component107 = map.get("component107");
+      component107 = graphDraw.addNode0(_type_of_component107, new Class<?>[]{}, g -> impl.loggingLevelApplier(), List.of());
       var _type_of_component108 = map.get("component108");
-      component108 = graphDraw.addNode0(_type_of_component108, new Class<?>[]{}, g -> impl.loggingLevelApplier(), List.of());
-      var _type_of_component109 = map.get("component109");
-      component109 = graphDraw.addNode0(_type_of_component109, new Class<?>[]{}, g -> impl.loggingLevelRefresher(
-            g.get(ApplicationGraph.holder0.component107),
-            g.get(ApplicationGraph.holder0.component108)
-          ), List.of(), component107, component108);
+      component108 = graphDraw.addNode0(_type_of_component108, new Class<?>[]{}, g -> impl.loggingLevelRefresher(
+            g.get(ApplicationGraph.holder0.component106),
+            g.get(ApplicationGraph.holder0.component107)
+          ), List.of(), component106, component107);
     }
   }
 }

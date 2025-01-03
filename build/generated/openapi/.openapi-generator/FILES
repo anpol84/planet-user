@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 ru/planet/user/api/UserApiController.java
 ru/planet/user/api/UserApiDelegate.java
 ru/planet/user/api/UserApiResponses.java

@@ -10,15 +10,14 @@ import java.lang.Long;
 import java.lang.Override;
 import java.lang.String;
 import java.lang.StringBuilder;
-import java.util.List;
 import ru.tinkoff.kora.common.annotation.Generated;
 import ru.tinkoff.kora.json.common.JsonReader;
 
 @Generated("ru.tinkoff.kora.json.annotation.processor.reader.JsonReaderGenerator")
 public final class $GetUserResponse_JsonReader implements JsonReader<GetUserResponse> {
-  private static final int ALL_FIELDS_RECEIVED = 0b1111;
+  private static final int ALL_FIELDS_RECEIVED = 0b111;
 
-  private static final int NULLABLE_FIELDS_RECEIVED = 0b1111;
+  private static final int NULLABLE_FIELDS_RECEIVED = 0b111;
 
   private static final SerializedString _id_optimized_field_name = new SerializedString("id");
 
@@ -26,12 +25,7 @@ public final class $GetUserResponse_JsonReader implements JsonReader<GetUserResp
 
   private static final SerializedString _city_optimized_field_name = new SerializedString("city");
 
-  private static final SerializedString _roles_optimized_field_name = new SerializedString("roles");
-
-  private final JsonReader<List<GetUserResponse.RolesEnum>> rolesReader;
-
-  public $GetUserResponse_JsonReader(JsonReader<List<GetUserResponse.RolesEnum>> rolesReader) {
-    this.rolesReader = rolesReader;
+  public $GetUserResponse_JsonReader() {
   }
 
   private static Long read_id(JsonParser __parser, int[] __receivedFields) throws IOException {
@@ -70,15 +64,6 @@ public final class $GetUserResponse_JsonReader implements JsonReader<GetUserResp
     }
   }
 
-  private List<GetUserResponse.RolesEnum> read_roles(JsonParser __parser, int[] __receivedFields)
-      throws IOException {
-    var __token = __parser.nextToken();
-    if (__token == JsonToken.VALUE_NULL) {
-      return null;
-    }
-    return rolesReader.read(__parser);
-  }
-
   @Override
   @Nullable
   public final GetUserResponse read(JsonParser __parser) throws IOException {
@@ -92,23 +77,19 @@ public final class $GetUserResponse_JsonReader implements JsonReader<GetUserResp
     Long id = null;
     String login = null;
     String city = null;
-    List<GetUserResponse.RolesEnum> roles = null;
     if (__parser.nextFieldName(_id_optimized_field_name)) {
       id = read_id(__parser, __receivedFields);
       if (__parser.nextFieldName(_login_optimized_field_name)) {
         login = read_login(__parser, __receivedFields);
         if (__parser.nextFieldName(_city_optimized_field_name)) {
           city = read_city(__parser, __receivedFields);
-          if (__parser.nextFieldName(_roles_optimized_field_name)) {
-            roles = read_roles(__parser, __receivedFields);
-            __token = __parser.nextToken();
-            while (__token != JsonToken.END_OBJECT) {
-                __parser.nextToken();
-                __parser.skipChildren();
-                __token = __parser.nextToken();
-            }
-            return new GetUserResponse(id, login, city, roles);
+          __token = __parser.nextToken();
+          while (__token != JsonToken.END_OBJECT) {
+              __parser.nextToken();
+              __parser.skipChildren();
+              __token = __parser.nextToken();
           }
+          return new GetUserResponse(id, login, city);
         }
       }
     }
@@ -127,9 +108,6 @@ public final class $GetUserResponse_JsonReader implements JsonReader<GetUserResp
         case "city" -> {
           city = read_city(__parser, __receivedFields);
         }
-        case "roles" -> {
-          roles = read_roles(__parser, __receivedFields);
-        }
         default -> {
           __parser.nextToken();
           __parser.skipChildren();
@@ -140,19 +118,18 @@ public final class $GetUserResponse_JsonReader implements JsonReader<GetUserResp
     if (__receivedFields[0] != ALL_FIELDS_RECEIVED) {
       var _nonReceivedFields = (~__receivedFields[0]) & ALL_FIELDS_RECEIVED;
       var __error = new StringBuilder("Some of required json fields were not received:");
-      for (int __i = 0; __i < 4; __i++) {
+      for (int __i = 0; __i < 3; __i++) {
         if ((_nonReceivedFields & (1 << __i)) != 0) {
           __error.append(" ").append(switch (__i) {
           case 0 -> "id(id)";
           case 1 -> "login(login)";
           case 2 -> "city(city)";
-          case 3 -> "roles(roles)";
           default -> "";
         });
         }
       }
       throw new JsonParseException(__parser, __error.toString());
     }
-    return new GetUserResponse(id, login, city, roles);
+    return new GetUserResponse(id, login, city);
   }
 }

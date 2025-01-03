@@ -205,13 +205,6 @@ components:
           type: string
         city:
           type: string
-        roles:
-          type: array
-          items:
-            type: string
-            enum:
-              - ADMIN
-              - USER
     ChangeUserRequest:
       type: object
       properties:

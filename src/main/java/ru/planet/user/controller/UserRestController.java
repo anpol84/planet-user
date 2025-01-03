@@ -10,7 +10,9 @@ import ru.planet.user.api.UserApiResponses.GetUserApiResponse;
 import ru.planet.user.model.ChangeUserRequest;
 import ru.planet.user.model.CreateUserRequest;
 import ru.planet.user.model.CreateUserResponse;
+import ru.planet.user.operation.ChangeUserOperation;
 import ru.planet.user.operation.CreateUserOperation;
+import ru.planet.user.operation.DeleteUserOperation;
 import ru.planet.user.operation.GetUserOperation;
 import ru.tinkoff.kora.common.Component;
 
@@ -19,20 +21,25 @@ import ru.tinkoff.kora.common.Component;
 public class UserRestController implements UserApiDelegate {
     private final CreateUserOperation createUserOperation;
     private final GetUserOperation getUserOperation;
+    private final ChangeUserOperation changeUserOperation;
+    private final DeleteUserOperation deleteUserOperation;
 
     @Override
     public ChangeUserApiResponse changeUser(long userId, String token, ChangeUserRequest changeUserRequest) throws Exception {
-        return null;
+        changeUserOperation.activate(changeUserRequest, userId);
+        return new ChangeUserApiResponse.ChangeUser200ApiResponse();
     }
 
     @Override
     public CreateUserApiResponse createUser(CreateUserRequest createUserRequest) throws Exception {
-        return new CreateUserApiResponse.CreateUser200ApiResponse(new CreateUserResponse(createUserOperation.activate(createUserRequest)));
+        return new CreateUserApiResponse.CreateUser200ApiResponse(
+                new CreateUserResponse(createUserOperation.activate(createUserRequest)));
     }
 
     @Override
     public DeleteUserApiResponse deleteUser(long userId, String token) throws Exception {
-        return null;
+        deleteUserOperation.activate(userId);
+        return new DeleteUserApiResponse.DeleteUser200ApiResponse();
     }
 
     @Override

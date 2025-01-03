@@ -20,25 +20,24 @@ import ru.tinkoff.kora.http.server.common.handler.RequestHandlerUtils;
 @Generated("ru.tinkoff.kora.http.server.annotation.processor.HttpControllerProcessor")
 @Module
 public interface UserApiControllerModule {
-  default HttpServerRequestHandler get_api_users_userId(UserApiController _controller,
-      UserApiServerResponseMappers.GetUserApiResponseMapper _responseMapper,
+  default HttpServerRequestHandler post_api_users(UserApiController _controller,
+      @Tag({ru.tinkoff.kora.json.common.annotation.Json.class}) HttpServerRequestMapper<CreateUserRequest> createUserRequestHttpRequestMapper,
+      UserApiServerResponseMappers.CreateUserApiResponseMapper _responseMapper,
       BlockingRequestExecutor _executor) {
-    return HttpServerRequestHandlerImpl.of("GET", "/api/users/{userId}", (_ctx, _request) -> {
-      final long userId;
-      final String token;
-      try {
-        userId = RequestHandlerUtils.parseLongPathParameter(_request, "userId");
-        token = RequestHandlerUtils.parseStringHeaderParameter(_request, "token");
-      } catch (Exception _e) {
-        if (_e instanceof HttpServerResponse) {
-          return CompletableFuture.failedFuture(_e);
-        } else {
-          return CompletableFuture.failedFuture(HttpServerResponseException.of(400, _e));
-        }
-      }
+    return HttpServerRequestHandlerImpl.of("POST", "/api/users", (_ctx, _request) -> {
 
       return _executor.execute(_ctx, () -> {
-        var _result = _controller.getUser(userId, token);
+        final CreateUserRequest createUserRequest;
+        try {
+          createUserRequest = createUserRequestHttpRequestMapper.apply(_request);
+        } catch (CompletionException _e) {
+          if (_e.getCause() instanceof HttpServerResponse && _e.getCause() instanceof RuntimeException) throw (RuntimeException) _e.getCause();
+          throw HttpServerResponseException.of(400, _e.getCause());
+        } catch (Exception _e) {
+          if (_e instanceof HttpServerResponse) throw _e;
+          throw HttpServerResponseException.of(400, _e);
+        }
+        var _result = _controller.createUser(createUserRequest);
         return _responseMapper.apply(_ctx, _request, _result);
       });
     });
@@ -80,29 +79,6 @@ public interface UserApiControllerModule {
     });
   }
 
-  default HttpServerRequestHandler post_api_users(UserApiController _controller,
-      @Tag({ru.tinkoff.kora.json.common.annotation.Json.class}) HttpServerRequestMapper<CreateUserRequest> createUserRequestHttpRequestMapper,
-      UserApiServerResponseMappers.CreateUserApiResponseMapper _responseMapper,
-      BlockingRequestExecutor _executor) {
-    return HttpServerRequestHandlerImpl.of("POST", "/api/users", (_ctx, _request) -> {
-
-      return _executor.execute(_ctx, () -> {
-        final CreateUserRequest createUserRequest;
-        try {
-          createUserRequest = createUserRequestHttpRequestMapper.apply(_request);
-        } catch (CompletionException _e) {
-          if (_e.getCause() instanceof HttpServerResponse && _e.getCause() instanceof RuntimeException) throw (RuntimeException) _e.getCause();
-          throw HttpServerResponseException.of(400, _e.getCause());
-        } catch (Exception _e) {
-          if (_e instanceof HttpServerResponse) throw _e;
-          throw HttpServerResponseException.of(400, _e);
-        }
-        var _result = _controller.createUser(createUserRequest);
-        return _responseMapper.apply(_ctx, _request, _result);
-      });
-    });
-  }
-
   default HttpServerRequestHandler delete_api_users_userId(UserApiController _controller,
       UserApiServerResponseMappers.DeleteUserApiResponseMapper _responseMapper,
       BlockingRequestExecutor _executor) {
@@ -122,6 +98,30 @@ public interface UserApiControllerModule {
 
       return _executor.execute(_ctx, () -> {
         var _result = _controller.deleteUser(userId, token);
+        return _responseMapper.apply(_ctx, _request, _result);
+      });
+    });
+  }
+
+  default HttpServerRequestHandler get_api_users_userId(UserApiController _controller,
+      UserApiServerResponseMappers.GetUserApiResponseMapper _responseMapper,
+      BlockingRequestExecutor _executor) {
+    return HttpServerRequestHandlerImpl.of("GET", "/api/users/{userId}", (_ctx, _request) -> {
+      final long userId;
+      final String token;
+      try {
+        userId = RequestHandlerUtils.parseLongPathParameter(_request, "userId");
+        token = RequestHandlerUtils.parseStringHeaderParameter(_request, "token");
+      } catch (Exception _e) {
+        if (_e instanceof HttpServerResponse) {
+          return CompletableFuture.failedFuture(_e);
+        } else {
+          return CompletableFuture.failedFuture(HttpServerResponseException.of(400, _e));
+        }
+      }
+
+      return _executor.execute(_ctx, () -> {
+        var _result = _controller.getUser(userId, token);
         return _responseMapper.apply(_ctx, _request, _result);
       });
     });

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.io.SerializedString;
 import jakarta.annotation.Nullable;
 import java.io.IOException;
 import java.lang.Override;
-import java.util.List;
 import ru.tinkoff.kora.common.annotation.Generated;
 import ru.tinkoff.kora.json.common.JsonWriter;
 
@@ -17,12 +16,7 @@ public final class $GetUserResponse_JsonWriter implements JsonWriter<GetUserResp
 
   private static final SerializedString _city_optimized_field_name = new SerializedString("city");
 
-  private static final SerializedString _roles_optimized_field_name = new SerializedString("roles");
-
-  private final JsonWriter<List<GetUserResponse.RolesEnum>> rolesWriter;
-
-  public $GetUserResponse_JsonWriter(JsonWriter<List<GetUserResponse.RolesEnum>> rolesWriter) {
-    this.rolesWriter = rolesWriter;
+  public $GetUserResponse_JsonWriter() {
   }
 
   @Override
@@ -44,10 +38,6 @@ public final class $GetUserResponse_JsonWriter implements JsonWriter<GetUserResp
     if (_object.city() != null) {
       _gen.writeFieldName(_city_optimized_field_name);
       _gen.writeString(_object.city());
-    }
-    if (_object.roles() != null) {
-      _gen.writeFieldName(_roles_optimized_field_name);
-      rolesWriter.write(_gen, _object.roles());
     }
     _gen.writeEndObject();
   }

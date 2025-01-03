@@ -23,6 +23,8 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
 
     private static final String CREATE_USER_PATH = "/api/users";
     private static final String CREATE_USER_METHOD = "POST";
+    private static final String USER_ID_PATH_VARIABLE = "userId";
+    private static final String HEADER_TOKEN = "token";
 
     private final JsonWriter<UserErrorResponse> errorJsonWriter;
     private final AuthGrpcService authGrpcService;
@@ -30,10 +32,11 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
     @Override
     public CompletionStage<HttpServerResponse> intercept(Context context, HttpServerRequest request, InterceptChain chain)
             throws Exception {
-        System.out.println(request.headers().getFirst("token"));
-        if (!request.method().equals(CREATE_USER_METHOD) && !request.path().equals(CREATE_USER_PATH)) {
-            if (!authGrpcService.checkToken(PlanetAuth.CheckTokenRequest.newBuilder()
-                            .setToken(request.headers().getFirst("token"))
+        if (!request.method().equals(CREATE_USER_METHOD) && !request.path().equals(CREATE_USER_PATH)
+                && request.pathParams().containsKey(USER_ID_PATH_VARIABLE)) {
+            if (!authGrpcService.checkTokenWithId(PlanetAuth.CheckTokenWithIdRequest.newBuilder()
+                            .setToken(request.headers().getFirst(HEADER_TOKEN))
+                            .setId(Long.parseLong(request.pathParams().get(USER_ID_PATH_VARIABLE)))
                     .build()).getIsValid()) {
                 var body = HttpBody.json(errorJsonWriter.toByteArrayUnchecked(new UserErrorResponse("token is not valid")));
                 return CompletableFuture.completedFuture(HttpServerResponse.of(403, body));
