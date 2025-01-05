@@ -10,10 +10,7 @@ import ru.planet.user.api.UserApiResponses.GetUserApiResponse;
 import ru.planet.user.model.ChangeUserRequest;
 import ru.planet.user.model.CreateUserRequest;
 import ru.planet.user.model.CreateUserResponse;
-import ru.planet.user.operation.ChangeUserOperation;
-import ru.planet.user.operation.CreateUserOperation;
-import ru.planet.user.operation.DeleteUserOperation;
-import ru.planet.user.operation.GetUserOperation;
+import ru.planet.user.operation.*;
 import ru.tinkoff.kora.common.Component;
 
 @Component
@@ -23,6 +20,7 @@ public class UserRestController implements UserApiDelegate {
     private final GetUserOperation getUserOperation;
     private final ChangeUserOperation changeUserOperation;
     private final DeleteUserOperation deleteUserOperation;
+    private final GetUsersOperation getUsersOperation;
 
     @Override
     public ChangeUserApiResponse changeUser(long userId, String token, ChangeUserRequest changeUserRequest) throws Exception {
@@ -45,6 +43,11 @@ public class UserRestController implements UserApiDelegate {
     @Override
     public GetUserApiResponse getUser(long userId, String token) throws Exception {
         return new GetUserApiResponse.GetUser200ApiResponse(getUserOperation.activate(userId));
+    }
+
+    @Override
+    public UserApiResponses.GetUsersApiResponse getUsers(String token) throws Exception {
+        return new UserApiResponses.GetUsersApiResponse.GetUsers200ApiResponse(getUsersOperation.activate());
     }
 }
 

@@ -10,6 +10,41 @@ tags:
 
 paths:
   /api/users:
+    get:
+      tags:
+        - user
+      summary: Get all users
+      operationId: getUsers
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUsersResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'token не передан'
+        '422':
+          description: Business logic error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserErrorResponse'
     post:
       tags:
         - user
@@ -215,3 +250,10 @@ components:
       required:
         - token
         - city
+    GetUsersResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetUserResponse'

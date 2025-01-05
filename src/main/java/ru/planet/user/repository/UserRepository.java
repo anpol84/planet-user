@@ -43,4 +43,8 @@ public interface UserRepository extends JdbcRepository {
     @Query("DELETE FROM user_roles WHERE user_id = :id")
     void deleteUserRoles(Long id);
 
+    @Log
+    @Query("SELECT id, username as login, city FROM users")
+    List<GetUser> getUsers();
+
 }
