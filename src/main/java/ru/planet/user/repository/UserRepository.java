@@ -47,4 +47,9 @@ public interface UserRepository extends JdbcRepository {
     @Query("SELECT id, username as login, city FROM users")
     List<GetUser> getUsers();
 
+    @Log
+    @Query("SELECT username FROM users WHERE id = :id")
+    @Nullable
+    String getLoginById(Long id);
+
 }

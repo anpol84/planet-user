@@ -3,6 +3,7 @@ package ru.planet.user.service.gRPC;
 import lombok.RequiredArgsConstructor;
 import ru.tinkoff.kora.common.Component;
 import ru.tinkoff.kora.generated.grpc.AuthServiceGrpc.AuthServiceBlockingStub;
+import ru.tinkoff.kora.generated.grpc.PlanetAuth.InvalidateUserCacheRequest;
 import ru.tinkoff.kora.generated.grpc.PlanetAuth.CheckAdminResponse;
 import ru.tinkoff.kora.generated.grpc.PlanetAuth.CheckAdminRequest;
 import ru.tinkoff.kora.generated.grpc.PlanetAuth.CheckTokenWithIdResponse;
@@ -29,5 +30,10 @@ public class AuthGrpcService {
     @Retry("default")
     public CheckAdminResponse checkAdminResponse(CheckAdminRequest request) {
         return authServiceBlockingStub.checkAdmin(request);
+    }
+
+    @Retry("default")
+    public void invalidateUserCache(InvalidateUserCacheRequest request) {
+        authServiceBlockingStub.invalidateUserCache(request);
     }
 }
