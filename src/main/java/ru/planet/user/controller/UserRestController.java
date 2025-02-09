@@ -1,15 +1,15 @@
 package ru.planet.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import ru.planet.user.api.UserApiDelegate;
-import ru.planet.user.api.UserApiResponses;
-import ru.planet.user.api.UserApiResponses.ChangeUserApiResponse;
-import ru.planet.user.api.UserApiResponses.CreateUserApiResponse;
-import ru.planet.user.api.UserApiResponses.DeleteUserApiResponse;
-import ru.planet.user.api.UserApiResponses.GetUserApiResponse;
-import ru.planet.user.model.ChangeUserRequest;
-import ru.planet.user.model.CreateUserRequest;
-import ru.planet.user.model.CreateUserResponse;
+import ru.planet.hotel.api.UserApiDelegate;
+import ru.planet.hotel.api.UserApiResponses;
+import ru.planet.hotel.api.UserApiResponses.ChangeUserApiResponse;
+import ru.planet.hotel.api.UserApiResponses.CreateUserApiResponse;
+import ru.planet.hotel.api.UserApiResponses.DeleteUserApiResponse;
+import ru.planet.hotel.api.UserApiResponses.GetUserApiResponse;
+import ru.planet.hotel.model.ChangeUserRequest;
+import ru.planet.hotel.model.CreateUserRequest;
+import ru.planet.hotel.model.CreateUserResponse;
 import ru.planet.user.operation.*;
 import ru.tinkoff.kora.common.Component;
 

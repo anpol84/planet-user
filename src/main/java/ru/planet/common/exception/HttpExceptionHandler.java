@@ -1,14 +1,12 @@
-package ru.planet.user.exception;
+package ru.planet.common.exception;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.planet.user.model.UserErrorResponse;
-import ru.planet.user.service.gRPC.AuthGrpcService;
+import ru.planet.hotel.model.UserErrorResponse;
+import ru.planet.user.service.AuthService;
 import ru.tinkoff.kora.common.Component;
 import ru.tinkoff.kora.common.Context;
 import ru.tinkoff.kora.common.Tag;
-import ru.tinkoff.kora.generated.grpc.PlanetAuth.CheckAdminRequest;
-import ru.tinkoff.kora.generated.grpc.PlanetAuth.CheckTokenWithIdRequest;
 import ru.tinkoff.kora.http.common.body.HttpBody;
 import ru.tinkoff.kora.http.common.header.HttpHeaders;
 import ru.tinkoff.kora.http.server.common.*;
@@ -34,7 +32,7 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
             "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 
     private final JsonWriter<UserErrorResponse> errorJsonWriter;
-    private final AuthGrpcService authGrpcService;
+    private final AuthService authService;
 
     @Override
     public CompletionStage<HttpServerResponse> intercept(Context context, HttpServerRequest request, InterceptChain chain)
@@ -79,16 +77,13 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
     }
 
     private CompletionStage<Boolean> validateAdminToken(HttpServerRequest request) {
-        return CompletableFuture.supplyAsync(() -> authGrpcService.checkAdminResponse(CheckAdminRequest.newBuilder()
-                .setToken(request.headers().getFirst(HEADER_TOKEN))
-                .build()).getIsValid());
+        return CompletableFuture.supplyAsync(() -> authService
+                .checkAdminResponse(request.headers().getFirst(HEADER_TOKEN)));
     }
 
     private CompletionStage<Boolean> validateTokenWithId(HttpServerRequest request) {
-        return CompletableFuture.supplyAsync(() -> authGrpcService.checkTokenWithId(CheckTokenWithIdRequest.newBuilder()
-                .setToken(request.headers().getFirst(HEADER_TOKEN))
-                .setId(Long.parseLong(request.pathParams().get(USER_ID_PATH_VARIABLE)))
-                .build()).getIsValid());
+        return CompletableFuture.supplyAsync(() -> authService.checkTokenWithId(request.headers().getFirst(HEADER_TOKEN),
+                Long.parseLong(request.pathParams().get(USER_ID_PATH_VARIABLE))));
     }
 
     private CompletionStage<HttpServerResponse> createErrorResponse(String message, int statusCode) {

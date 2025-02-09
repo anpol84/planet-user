@@ -1,7 +1,7 @@
-package ru.planet.user;
+package ru.planet;
 
-import ru.tinkoff.grpc.client.GrpcClientModule;
 import ru.tinkoff.kora.application.graph.KoraApplication;
+import ru.tinkoff.kora.cache.caffeine.CaffeineCacheModule;
 import ru.tinkoff.kora.common.KoraApp;
 import ru.tinkoff.kora.config.hocon.HoconConfigModule;
 import ru.tinkoff.kora.database.jdbc.JdbcDatabaseModule;
@@ -21,7 +21,7 @@ public interface Application extends
         UndertowHttpServerModule,
         JsonModule,
         ValidationModule,
-        GrpcClientModule,
+        CaffeineCacheModule,
         ResilientModule {
 
     static void main(String[] args) {

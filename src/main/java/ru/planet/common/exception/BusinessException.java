@@ -1,4 +1,4 @@
-package ru.planet.user.exception;
+package ru.planet.common.exception;
 
 import lombok.*;
 

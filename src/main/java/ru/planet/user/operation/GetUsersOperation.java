@@ -2,7 +2,7 @@ package ru.planet.user.operation;
 
 import lombok.RequiredArgsConstructor;
 import ru.planet.user.helper.mapper.UserMapper;
-import ru.planet.user.model.GetUsersResponse;
+import ru.planet.hotel.model.GetUsersResponse;
 import ru.planet.user.repository.UserRepository;
 import ru.tinkoff.kora.common.Component;
 

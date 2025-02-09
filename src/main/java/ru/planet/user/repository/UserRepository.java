@@ -1,5 +1,6 @@
 package ru.planet.user.repository;
 
+import jakarta.annotation.Nullable;
 import ru.planet.user.dto.CreateUser;
 import ru.planet.user.dto.GetUser;
 import ru.tinkoff.kora.database.common.UpdateCount;
@@ -8,7 +9,6 @@ import ru.tinkoff.kora.database.common.annotation.Repository;
 import ru.tinkoff.kora.database.jdbc.JdbcRepository;
 import ru.tinkoff.kora.logging.common.annotation.Log;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 @Repository

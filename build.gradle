@@ -6,17 +6,26 @@ buildscript {
     }
 }
 
+
+
 plugins {
     id "java"
     id "jacoco"
     id "application"
 
     id "org.openapi.generator" version "7.4.0"
-    id "com.google.protobuf" version "0.9.4"
+}
+
+def envVars = loadEnv()
+
+run {
+    environment([
+            "DB_URL":envVars.get("DB_URL"),
+    ])
 }
 
 applicationName = "application"
-mainClassName = "ru.planet.user.Application"
+mainClassName = "ru.planet.Application"
 
 sourceCompatibility = JavaVersion.VERSION_21
 targetCompatibility = JavaVersion.VERSION_21
@@ -39,7 +48,6 @@ dependencies {
     implementation "org.mapstruct:mapstruct:1.5.5.Final"
     annotationProcessor "ru.tinkoff.kora:annotation-processors"
 
-    implementation "io.grpc:grpc-protobuf:1.58.0"
     implementation "javax.annotation:javax.annotation-api:1.3.2"
     implementation "ru.tinkoff.kora:http-server-undertow"
     implementation "ru.tinkoff.kora:logging-logback"
@@ -48,8 +56,13 @@ dependencies {
     implementation "ru.tinkoff.kora:json-module"
     implementation "ru.tinkoff.kora:validation-module"
     implementation "ru.tinkoff.kora:micrometer-module"
-    implementation "ru.tinkoff.kora:grpc-client"
     implementation "ru.tinkoff.kora:resilient-kora"
+    implementation 'org.mindrot:jbcrypt:0.4'
+    implementation "ru.tinkoff.kora:cache-caffeine"
+
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 
     implementation "ru.tinkoff.kora:database-jdbc"
     annotationProcessor "org.projectlombok:lombok:1.18.36"
@@ -61,16 +74,6 @@ dependencies {
     testImplementation "ru.tinkoff.kora:test-junit5"
 }
 
-protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:3.25.3" }
-    plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.62.2" }
-    }
-
-    generateProtoTasks {
-        all()*.plugins { grpc {} }
-    }
-}
 
 test.dependsOn tasks.distTar
 
@@ -109,15 +112,31 @@ test {
 tasks.register("openApiGenerateHttpServer", GenerateTask) {
     generatorName = "kora"
     group = "openapi tools"
-    inputSpec = "$projectDir/src/main/resources/openapi/planet-user.yaml"
+    inputSpec = "$projectDir/src/main/resources/openapi/planet-hotel.yaml"
     outputDir = "$projectDir/build/generated/openapi"
-    apiPackage = "ru.planet.user.api"
-    modelPackage = "ru.planet.user.model"
-    invokerPackage = "ru.planet.user.invoker"
+    apiPackage = "ru.planet.hotel.api"
+    modelPackage = "ru.planet.hotel.model"
+    invokerPackage = "ru.planet.hotel.invoker"
     configOptions = [
             mode                  : "java-server",
             enableServerValidation: "true"
     ]
+}
+
+def loadEnv() {
+    def envFile = file('.env')
+    def envMap = [:]
+    if (envFile.exists()) {
+        envFile.eachLine { line ->
+            if (!line.startsWith('#') && line.contains('=')) {
+                def (key, value) = line.split('=', 2)
+                envMap[key.trim()] = value.trim()
+            }
+        }
+    } else {
+        println "Файл .env не найден"
+    }
+    return envMap
 }
 
 compileJava.dependsOn tasks.openApiGenerateHttpServer
@@ -125,8 +144,6 @@ compileJava.dependsOn tasks.openApiGenerateHttpServer
 sourceSets {
     main {
         java {
-            srcDirs "build/generated/source/proto/main/grpc"
-            srcDirs "build/generated/source/proto/main/java"
             srcDirs "build/generated/openapi"
         }
     }

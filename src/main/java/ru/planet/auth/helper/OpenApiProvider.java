@@ -1,4 +1,4 @@
-package ru.planet.user.helper;
+package ru.planet.auth.helper;
 
 import com.typesafe.config.Config;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public final class OpenApiProvider {
 
-    private static final String RESOURCE_PATH = "openapi/planet-hotel.yaml";
+    private static final String RESOURCE_PATH = "openapi/planet-auth.yaml";
 
     private final String contract;
     private final boolean enabled;

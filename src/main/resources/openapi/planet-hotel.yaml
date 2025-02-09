@@ -7,8 +7,74 @@ info:
 tags:
   - name: user
     description: Manipulate users
+  - name: auth
+    description: Get jwt token
 
 paths:
+  /api/auth:
+    post:
+      tags:
+        - auth
+      summary: Get a jwt token
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        '200':
+          description: Jwt token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'login' или 'password' не передано"
+        '422':
+          description: Ошибка в бизнес логике
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthErrorResponse'
+  /api/validate:
+    post:
+      tags:
+        - auth
+      summary: validate a jwt token
+      operationId: checkToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateRequest'
+      responses:
+        '200':
+          description: Validate answer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateResponse'
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'token' не передано"
   /api/users:
     get:
       tags:
@@ -207,6 +273,38 @@ paths:
 
 components:
   schemas:
+    AuthRequest:
+      type: object
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+      required:
+        - login
+        - password
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+    AuthErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    ValidateRequest:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+        - token
+    ValidateResponse:
+      type: object
+      properties:
+        isValid:
+          type: boolean
     CreateUserRequest:
       type: object
       properties:

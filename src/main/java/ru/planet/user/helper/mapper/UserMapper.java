@@ -5,9 +5,9 @@ import org.mindrot.jbcrypt.BCrypt;
 import ru.planet.user.configuration.properties.BcryptProperties;
 import ru.planet.user.dto.CreateUser;
 import ru.planet.user.dto.GetUser;
-import ru.planet.user.model.ChangeUserRequest;
-import ru.planet.user.model.CreateUserRequest;
-import ru.planet.user.model.GetUserResponse;
+import ru.planet.hotel.model.ChangeUserRequest;
+import ru.planet.hotel.model.CreateUserRequest;
+import ru.planet.hotel.model.GetUserResponse;
 
 @Mapper
 public interface UserMapper {
