@@ -1,4 +1,4 @@
-package ru.planet.user.helper;
+package ru.planet.common;
 
 import lombok.experimental.UtilityClass;
 

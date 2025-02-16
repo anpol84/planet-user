@@ -2,7 +2,7 @@ package ru.planet.common.exception;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.planet.hotel.model.UserErrorResponse;
+import ru.planet.hotel.model.ErrorResponse;
 import ru.planet.user.service.AuthService;
 import ru.tinkoff.kora.common.Component;
 import ru.tinkoff.kora.common.Context;
@@ -12,6 +12,7 @@ import ru.tinkoff.kora.http.common.header.HttpHeaders;
 import ru.tinkoff.kora.http.server.common.*;
 import ru.tinkoff.kora.json.common.JsonWriter;
 
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -31,14 +32,28 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
             "Access-Control-Allow-Headers", "Content-Type, token",
             "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 
-    private final JsonWriter<UserErrorResponse> errorJsonWriter;
+    private final JsonWriter<ErrorResponse> errorJsonWriter;
     private final AuthService authService;
 
     @Override
     public CompletionStage<HttpServerResponse> intercept(Context context, HttpServerRequest request, InterceptChain chain)
             throws Exception {
-        if (isGetUsersRequest(request)) {
+        if (isGetUsersRequest(request) || (request.path().equals("/api/hotels") && request.method().equals("POST"))
+        || (request.pathParams().containsKey("hotelId") && Set.of("PUT", "DELETE").contains(request.method()))) {
             return validateAdminToken(request)
+                    .thenCompose(isValid -> {
+                        if (!isValid) {
+                            return createErrorResponse("token is not valid", 403);
+                        }
+                        try {
+                            return processRequest(context, request, chain);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+        }
+        if (request.path().equals("/api/hotels/filter") && request.method().equals("POST")) {
+            return validateToken(request)
                     .thenCompose(isValid -> {
                         if (!isValid) {
                             return createErrorResponse("token is not valid", 403);
@@ -86,8 +101,12 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
                 Long.parseLong(request.pathParams().get(USER_ID_PATH_VARIABLE))));
     }
 
+    private CompletionStage<Boolean> validateToken(HttpServerRequest request) {
+        return CompletableFuture.supplyAsync(() -> authService.checkToken(request.headers().getFirst(HEADER_TOKEN)));
+    }
+
     private CompletionStage<HttpServerResponse> createErrorResponse(String message, int statusCode) {
-        var body = HttpBody.json(errorJsonWriter.toByteArrayUnchecked(new UserErrorResponse(message)));
+        var body = HttpBody.json(errorJsonWriter.toByteArrayUnchecked(new ErrorResponse(message)));
         return CompletableFuture.completedFuture(HttpServerResponse.of(statusCode, CORS_HEADERS, body));
     }
 
@@ -101,7 +120,7 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
             return ex;
         }
 
-        var body = HttpBody.json(errorJsonWriter.toByteArrayUnchecked(new UserErrorResponse(e.getCause().getMessage())));
+        var body = HttpBody.json(errorJsonWriter.toByteArrayUnchecked(new ErrorResponse(e.getCause().getMessage())));
         if (e.getCause() instanceof BusinessException) {
             log.warn("Request '{} {}' failed due to {}", request.method(), request.path(), e.getMessage());
             return HttpServerResponse.of(422, CORS_HEADERS, body);

@@ -1,7 +1,6 @@
-package ru.planet.user.controller;
+package ru.planet.common.openapi;
 
 import lombok.RequiredArgsConstructor;
-import ru.planet.user.helper.OpenApiProvider;
 import ru.tinkoff.kora.http.common.HttpMethod;
 import ru.tinkoff.kora.http.common.annotation.HttpRoute;
 import ru.tinkoff.kora.http.common.body.HttpBody;

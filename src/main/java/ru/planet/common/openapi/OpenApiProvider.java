@@ -1,4 +1,4 @@
-package ru.planet.user.helper;
+package ru.planet.common.openapi;
 
 import com.typesafe.config.Config;
 import lombok.Getter;

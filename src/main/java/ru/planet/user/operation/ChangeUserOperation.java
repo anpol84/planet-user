@@ -8,7 +8,7 @@ import ru.planet.user.repository.UserRepository;
 import ru.tinkoff.kora.common.Component;
 import ru.tinkoff.kora.database.jdbc.RuntimeSqlException;
 
-import static ru.planet.user.helper.DuplicateExceptionValidator.validateDuplicatePositionException;
+import static ru.planet.common.DuplicateExceptionValidator.validateDuplicatePositionException;
 
 @Component
 @RequiredArgsConstructor

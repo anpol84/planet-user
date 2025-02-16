@@ -11,9 +11,6 @@ public class CheckTokenOperation {
     private final JwtService jwtService;
 
     public boolean activate(String jwt) {
-        if (jwt.isEmpty()) {
-            throw new ValidationException("jwt is not presented or empty");
-        }
         return jwtService.isValidJwt(jwt);
     }
 }

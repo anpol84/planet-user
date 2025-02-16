@@ -16,13 +16,6 @@ plugins {
     id "org.openapi.generator" version "7.4.0"
 }
 
-def envVars = loadEnv()
-
-run {
-    environment([
-            "DB_URL":envVars.get("DB_URL"),
-    ])
-}
 
 applicationName = "application"
 mainClassName = "ru.planet.Application"

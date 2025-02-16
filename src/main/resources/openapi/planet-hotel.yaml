@@ -9,8 +9,244 @@ tags:
     description: Manipulate users
   - name: auth
     description: Get jwt token
+  - name: hotel
+    description: Manipulate a hotel
 
 paths:
+  /api/hotels:
+    post:
+      tags:
+        - hotel
+      summary: Create a hotel
+      operationId: createHotel
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateHotelRequest'
+      responses:
+        '200':
+          description: Hotel created
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'login' или 'password' не передано"
+        '422':
+          description: Ошибка в бизнес логике
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - hotel
+      summary: Get hotels
+      operationId: getHotels
+      responses:
+        '200':
+          description: Hotel Info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHotelsResponse'
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'login' или 'password' не передано"
+        '422':
+          description: Ошибка в бизнес логике
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/hotels/filter:
+    get:
+      tags:
+        - hotel
+      summary: Get filtered hotels
+      operationId: getFilteredHotels
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+        - name: city
+          in: query
+          required: true
+          description: Location to filter hotels
+          schema:
+            type: string
+        - name: minPrice
+          in: query
+          required: true
+          description: min Price for hotel
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: FilteredHotels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFilteredHotelsResponse'
+        '202':
+          description: Hotels not found
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'login' или 'password' не передано"
+        '422':
+          description: Ошибка в бизнес логике
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/hotels/{hotelId}:
+    get:
+      tags:
+        - hotel
+      summary: Get a hotel
+      operationId: getHotel
+      parameters:
+        - name: hotelId
+          in: path
+          required: true
+          description: hotel id
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Hotel Info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHotelResponse'
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '422':
+          description: Ошибка в бизнес логике
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - hotel
+      summary: Change hotel info
+      operationId: updateHotel
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+        - name: hotelId
+          in: path
+          required: true
+          description: hotel id
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateHotelRequest'
+      responses:
+        '200':
+          description: Hotel updated
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '422':
+          description: Ошибка в бизнес логике
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - hotel
+      summary: Delete a hotel
+      operationId: deleteHotel
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+        - name: hotelId
+          in: path
+          required: true
+          description: hotel id
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Hotel Deleted
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '422':
+          description: Ошибка в бизнес логике
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /api/auth:
     post:
       tags:
@@ -45,7 +281,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthErrorResponse'
+                $ref: '#/components/schemas/ErrorResponse'
   /api/validate:
     post:
       tags:
@@ -110,7 +346,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserErrorResponse'
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
         - user
@@ -144,7 +380,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserErrorResponse'
+                $ref: '#/components/schemas/ErrorResponse'
   /api/users/{userId}:
     get:
       tags:
@@ -187,7 +423,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserErrorResponse'
+                $ref: '#/components/schemas/ErrorResponse'
     put:
       tags:
         - user
@@ -231,7 +467,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserErrorResponse'
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - user
@@ -269,7 +505,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserErrorResponse'
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   schemas:
@@ -288,7 +524,7 @@ components:
       properties:
         token:
           type: string
-    AuthErrorResponse:
+    ErrorResponse:
       type: object
       properties:
         message:
@@ -312,21 +548,13 @@ components:
           type: string
         password:
           type: string
-        city:
-          type: string
       required:
         - login
         - password
-        - city
     CreateUserResponse:
       type: object
       properties:
         token:
-          type: string
-    UserErrorResponse:
-      type: object
-      properties:
-        message:
           type: string
     GetUserResponse:
       type: object
@@ -336,18 +564,13 @@ components:
           format: int64
         login:
           type: string
-        city:
-          type: string
     ChangeUserRequest:
       type: object
       properties:
         login:
           type: string
-        city:
-          type: string
       required:
         - token
-        - city
     GetUsersResponse:
       type: object
       properties:
@@ -355,3 +578,312 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GetUserResponse'
+    CreateHotelRequest:
+      type: object
+      required:
+        - name
+        - city
+        - stars
+        - positions
+        - additions
+        - roomPeople
+        - roomViews
+        - roomTypes
+        - imageUrl
+      properties:
+        name:
+          type: string
+        city:
+          type: string
+        stars:
+          type: integer
+        imageUrl:
+          type: string
+        positions:
+          type: array
+          items:
+            type: string
+            enum:
+              - CENTER
+              - PARK
+              - SEA
+              - AIRPORT
+              - RAILWAY
+        additions:
+          type: array
+          items:
+            type: string
+            enum:
+              - WIFI
+              - PARKING
+              - RESTAURANT
+              - BEACH
+              - POOL
+              - AQUA_PARK
+              - SAUNA
+              - FITNESS
+        roomPeople:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomPeople'
+        roomViews:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomView'
+        roomTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomType'
+    RoomPeople:
+      type: object
+      required:
+        - type
+        - price
+      properties:
+        type:
+          type: string
+          enum:
+            - SINGLE
+            - DOUBLE
+            - TWIN
+            - DBL_EXB
+            - TRIPLE
+        price:
+          type: number
+          format: double
+    RoomView:
+      type: object
+      required:
+        - type
+        - price
+      properties:
+        type:
+          type: string
+          enum:
+            - SEA_VIEW
+            - CITY_VIEW
+            - GARDEN_VIEW
+            - POOL_VIEW
+        price:
+          type: number
+          format: double
+    RoomType:
+      type: object
+      required:
+        - type
+        - price
+      properties:
+        type:
+          type: string
+          enum:
+            - STANDARD
+            - SUPERIOR
+            - STUDIO
+            - FAMILY_ROOM
+            - FAMILY_STUDIO
+            - DELUX
+            - SUITE
+            - PRESIDENTIAL_SUITE
+            - HONEYMOON_SUITE
+        price:
+          type: number
+          format: double
+    GetHotelResponse:
+      type: object
+      required:
+        - id
+        - name
+        - city
+        - stars
+        - avgRate
+        - minPrice
+        - maxPrice
+        - imageUrl
+        - positions
+        - additions
+        - roomPeople
+        - roomViews
+        - roomTypes
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        city:
+          type: string
+        stars:
+          type: integer
+        avgRate:
+          type: number
+          format: double
+        minPrice:
+          type: number
+          format: double
+        maxPrice:
+          type: number
+          format: double
+        imageUrl:
+          type: string
+        positions:
+          type: array
+          items:
+            type: string
+            enum:
+              - CENTER
+              - PARK
+              - SEA
+              - AIRPORT
+              - RAILWAY
+        additions:
+          type: array
+          items:
+            type: string
+            enum:
+              - WIFI
+              - PARKING
+              - RESTAURANT
+              - BEACH
+              - POOL
+              - AQUA_PARK
+              - SAUNA
+              - FITNESS
+        roomPeople:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomPeople'
+        roomViews:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomView'
+        roomTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomType'
+    GetHotelsResponse:
+      type: object
+      properties:
+        hotels:
+          type: array
+          items:
+            $ref: '#/components/schemas/HotelWithoutExtensions'
+    HotelWithoutExtensions:
+      type: object
+      required:
+        - id
+        - name
+        - city
+        - stars
+        - avgRate
+        - minPrice
+        - maxPrice
+        - imageUrl
+        - positions
+        - additions
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        city:
+          type: string
+        stars:
+          type: integer
+        avgRate:
+          type: number
+          format: double
+        minPrice:
+          type: number
+          format: double
+        maxPrice:
+          type: number
+          format: double
+        imageUrl:
+          type: string
+        positions:
+          type: array
+          items:
+            type: string
+            enum:
+              - CENTER
+              - PARK
+              - SEA
+              - AIRPORT
+              - RAILWAY
+        additions:
+          type: array
+          items:
+            type: string
+            enum:
+              - WIFI
+              - PARKING
+              - RESTAURANT
+              - BEACH
+              - POOL
+              - AQUA_PARK
+              - SAUNA
+              - FITNESS
+    GetFilteredHotelsResponse:
+      type: object
+      properties:
+        hotels:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetHotelResponse'
+    UpdateHotelRequest:
+      type: object
+      required:
+        - name
+        - city
+        - stars
+        - positions
+        - additions
+        - roomPeople
+        - roomViews
+        - roomTypes
+        - imageUrl
+      properties:
+        name:
+          type: string
+        city:
+          type: string
+        stars:
+          type: integer
+        imageUrl:
+          type: string
+        positions:
+          type: array
+          items:
+            type: string
+            enum:
+              - CENTER
+              - PARK
+              - SEA
+              - AIRPORT
+              - RAILWAY
+        additions:
+          type: array
+          items:
+            type: string
+            enum:
+              - WIFI
+              - PARKING
+              - RESTAURANT
+              - BEACH
+              - POOL
+              - AQUA_PARK
+              - SAUNA
+              - FITNESS
+        roomPeople:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomPeople'
+        roomViews:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomView'
+        roomTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomType'

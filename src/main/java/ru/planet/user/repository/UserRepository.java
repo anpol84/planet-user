@@ -19,7 +19,7 @@ public interface UserRepository extends JdbcRepository {
     List<String> findRoles(Long id);
 
     @Log
-    @Query("INSERT INTO users (username, password, city) VALUES (:user.login, :user.password, :user.city) RETURNING id")
+    @Query("INSERT INTO users (username, password) VALUES (:user.login, :user.password) RETURNING id")
     long insertUser(CreateUser user);
 
     @Log
@@ -27,12 +27,12 @@ public interface UserRepository extends JdbcRepository {
     void insertUserRole(Long id);
 
     @Log
-    @Query("SELECT id, username as login, city FROM users WHERE id = :id")
+    @Query("SELECT id, username as login FROM users WHERE id = :id")
     @Nullable
     GetUser getUser(Long id);
 
     @Log
-    @Query("UPDATE users SET username = :user.login, city = :user.city WHERE id = :id")
+    @Query("UPDATE users SET username = :user.login WHERE id = :id")
     UpdateCount updateUser(CreateUser user, Long id);
 
     @Log
@@ -44,7 +44,7 @@ public interface UserRepository extends JdbcRepository {
     void deleteUserRoles(Long id);
 
     @Log
-    @Query("SELECT id, username as login, city FROM users")
+    @Query("SELECT id, username as login FROM users")
     List<GetUser> getUsers();
 
     @Log
