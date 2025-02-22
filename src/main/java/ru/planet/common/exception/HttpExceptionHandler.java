@@ -87,8 +87,9 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
     }
 
     private boolean isUserIdPathRequest(HttpServerRequest request) {
-        return !request.method().equals(CREATE_USER_METHOD) && !request.path().equals(CREATE_USER_PATH)
-                && request.pathParams().containsKey(USER_ID_PATH_VARIABLE);
+        return (!request.method().equals(CREATE_USER_METHOD) && !request.path().equals(CREATE_USER_PATH)
+                && request.pathParams().containsKey(USER_ID_PATH_VARIABLE)) ||
+                (request.path().startsWith("/api/hotels/favourite"));
     }
 
     private CompletionStage<Boolean> validateAdminToken(HttpServerRequest request) {

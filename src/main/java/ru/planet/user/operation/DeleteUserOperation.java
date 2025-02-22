@@ -15,9 +15,12 @@ public class DeleteUserOperation {
     public void activate(long id) {
         userRepository.deleteUserRoles(id);
         String login = userRepository.getLoginById(id);
-        if (userRepository.deleteUser(id).value() == 0) {
-            throw new BusinessException("Такого пользователя не существует");
-        }
+        userRepository.getJdbcConnectionFactory().inTx(() -> {
+            userRepository.deleteUserFavourites(id);
+            if (userRepository.deleteUser(id).value() == 0) {
+                throw new BusinessException("Такого пользователя не существует");
+            }
+        });
         userCache.invalidate(login);
     }
 }

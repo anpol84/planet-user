@@ -107,6 +107,12 @@ public interface HotelRepository extends JdbcRepository {
     List<GetHotel> getHotels();
 
     @Query("""
+            SELECT * FROM hotel h JOIN user_favourite u ON h.id = u.hotel_id WHERE u.user_id = :id
+            """)
+    @Mapping(GetHotelRowMapper.class)
+    List<GetHotel> getFavouriteHotels(Long id);
+
+    @Query("""
             SELECT * FROM hotel
             WHERE city = :city AND min_price <= :minPrice
             """)
@@ -169,6 +175,21 @@ public interface HotelRepository extends JdbcRepository {
             DELETE from hotel WHERE id = :id
             """)
     UpdateCount deleteHotel(Long id);
+
+    @Query("""
+            INSERT INTO user_favourite (user_id, hotel_id) VALUES (:userId, :hotelId)
+            """)
+    void addFavouriteHotel(Long userId, Long hotelId);
+
+    @Query("""
+            DELETE FROM user_favourite WHERE user_id = :userId AND hotel_id = :hotelId
+            """)
+    void deleteFavouriteHotel(Long userId, Long hotelId);
+
+    @Query("""
+            DELETE FROM user_favourite WHERE hotel_id = :hotelId)
+            """)
+    void deleteHotelFavourites(Long hotelId);
 
     final class GetHotelRowMapper implements JdbcRowMapper<GetHotel> {
 

@@ -18,6 +18,7 @@ public class DeleteHotelOperation {
             hotelRepository.deleteHotelViews(id);
             hotelRepository.deleteHotelTypes(id);
             hotelRepository.deleteHotelPeople(id);
+            hotelRepository.deleteHotelFavourites(id);
             if (hotelRepository.deleteHotel(id).value() == 0) {
                 throw new BusinessException("Такого отеля не существует");
             }

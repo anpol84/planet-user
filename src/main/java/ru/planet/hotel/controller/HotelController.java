@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ru.planet.hotel.api.HotelApiDelegate;
 import ru.planet.hotel.api.HotelApiResponses;
 import ru.planet.hotel.model.CreateHotelRequest;
+import ru.planet.hotel.model.FavouriteHotelRequest;
 import ru.planet.hotel.model.UpdateHotelRequest;
 import ru.planet.hotel.operation.*;
 import ru.tinkoff.kora.common.Component;
@@ -18,6 +19,18 @@ public class HotelController implements HotelApiDelegate {
     private final GetFilteredHotelsOperation getFilteredHotelsOperation;
     private final UpdateHotelOperation updateHotelOperation;
     private final DeleteHotelOperation deleteHotelOperation;
+    private final AddFavouriteHotelOperation addFavouriteHotelOperation;
+    private final DeleteFavouriteHotelOperation deleteFavouriteHotelOperation;
+    private final GetFavouriteHotelsOperation getFavouriteHotelsOperation;
+
+    @Override
+    public HotelApiResponses.AddFavouriteHotelApiResponse addFavouriteHotel(String token,
+                                                                            long userId,
+                                                                            FavouriteHotelRequest favouriteHotelRequest)
+            throws Exception {
+        addFavouriteHotelOperation.activate(userId, favouriteHotelRequest.hotelId());
+        return new HotelApiResponses.AddFavouriteHotelApiResponse.AddFavouriteHotel202ApiResponse();
+    }
 
     @Override
     public HotelApiResponses.CreateHotelApiResponse createHotel(String token,
@@ -28,9 +41,23 @@ public class HotelController implements HotelApiDelegate {
     }
 
     @Override
+    public HotelApiResponses.DeleteFavouriteHotelApiResponse deleteFavouriteHotel(String token,
+                                                                                  long userId,
+                                                                                  FavouriteHotelRequest favouriteHotelRequest)
+            throws Exception {
+        deleteFavouriteHotelOperation.activate(userId, favouriteHotelRequest.hotelId());
+        return new HotelApiResponses.DeleteFavouriteHotelApiResponse.DeleteFavouriteHotel202ApiResponse();
+    }
+
+    @Override
     public HotelApiResponses.DeleteHotelApiResponse deleteHotel(String token, long hotelId) throws Exception {
         deleteHotelOperation.activate(hotelId);
         return new HotelApiResponses.DeleteHotelApiResponse.DeleteHotel200ApiResponse();
+    }
+
+    @Override
+    public HotelApiResponses.GetFavouriteHotelsApiResponse getFavouriteHotels(String token, long userId) throws Exception {
+        return new HotelApiResponses.GetFavouriteHotelsApiResponse.GetFavouriteHotels200ApiResponse(getFavouriteHotelsOperation.activate(userId));
     }
 
     @Override

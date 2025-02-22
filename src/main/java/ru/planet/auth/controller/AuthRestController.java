@@ -1,6 +1,7 @@
 package ru.planet.auth.controller;
 
 import lombok.RequiredArgsConstructor;
+import ru.planet.auth.operation.CheckAdminOperation;
 import ru.planet.auth.operation.CheckTokenOperation;
 import ru.planet.hotel.api.AuthApiDelegate;
 import ru.planet.hotel.api.AuthApiResponses;
@@ -18,6 +19,14 @@ import ru.tinkoff.kora.logging.common.annotation.Log;
 public class AuthRestController implements AuthApiDelegate {
     private final LoginOperation loginOperation;
     private final CheckTokenOperation checkTokenOperation;
+    private final CheckAdminOperation checkAdminOperation;
+
+    @Override
+    public AuthApiResponses.CheckAdminTokenApiResponse checkAdminToken(ValidateRequest validateRequest) throws Exception {
+        return new AuthApiResponses.CheckAdminTokenApiResponse.CheckAdminToken200ApiResponse(
+                new ValidateResponse(checkAdminOperation.activate(validateRequest.token()))
+        );
+    }
 
     @Override
     @Log

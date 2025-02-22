@@ -246,7 +246,137 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
+  /api/hotels/favourite/{userId}:
+    post:
+      tags:
+        - hotel
+      summary: Create a link between user and favourite hotel
+      operationId: addFavouriteHotel
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          description: User id
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavouriteHotelRequest'
+      responses:
+        '202':
+          description: Link created
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'login' или 'password' не передано"
+        '422':
+          description: Ошибка в бизнес логике
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - hotel
+      summary: Delete a link between user and favourite hotel
+      operationId: deleteFavouriteHotel
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          description: User id
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavouriteHotelRequest'
+      responses:
+        '202':
+          description: Link deleted
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'login' или 'password' не передано"
+        '422':
+          description: Ошибка в бизнес логике
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - hotel
+      summary: Get a favourite user's hotels
+      operationId: getFavouriteHotels
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          description: User id
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Hotel Info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFavouriteHotelsResponse'
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'login' или 'password' не передано"
+        '422':
+          description: Ошибка в бизнес логике
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /api/auth:
     post:
       tags:
@@ -288,6 +418,35 @@ paths:
         - auth
       summary: validate a jwt token
       operationId: checkToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateRequest'
+      responses:
+        '200':
+          description: Validate answer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateResponse'
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'token' не передано"
+  /api/validate/admin:
+    post:
+      tags:
+        - auth
+      summary: validate a jwt token
+      operationId: checkAdminToken
       requestBody:
         required: true
         content:
@@ -571,6 +730,14 @@ components:
           type: string
       required:
         - token
+    FavouriteHotelRequest:
+      type: object
+      required:
+        - hotelId
+      properties:
+        hotelId:
+          type: integer
+          format: int64
     GetUsersResponse:
       type: object
       properties:
@@ -887,3 +1054,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RoomType'
+    GetFavouriteHotelsResponse:
+      type: object
+      properties:
+        hotels:
+          type: array
+          items:
+            $ref: '#/components/schemas/HotelWithoutExtensions'

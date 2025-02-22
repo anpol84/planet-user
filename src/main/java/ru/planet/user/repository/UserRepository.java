@@ -52,4 +52,9 @@ public interface UserRepository extends JdbcRepository {
     @Nullable
     String getLoginById(Long id);
 
+    @Query("""
+            DELETE FROM user_favourite WHERE user_id = :userId)
+            """)
+    void deleteUserFavourites(Long userId);
+
 }
