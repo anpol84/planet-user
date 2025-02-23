@@ -66,7 +66,7 @@ public class JwtService {
                 (String.valueOf(claims.get(ClaimField.ROLE)).contains("ROLE_ADMIN"));
     }
 
-    private Claims getClaims(String token) {
+    public Claims getClaims(String token) {
         try {
             return Jwts.parser()
                     .verifyWith(generateSecretKey())

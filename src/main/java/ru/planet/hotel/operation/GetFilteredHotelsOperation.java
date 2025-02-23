@@ -27,7 +27,7 @@ public class GetFilteredHotelsOperation {
             var hotelTypes = hotelRepository.getHotelType(hotel.id());
             var hotelPeople = hotelRepository.getHotelPeople(hotel.id());
             var hotelWithExtensions = hotelMapper.buildGetHotelResponse(hotel, hotelViews,
-                    hotelTypes, hotelPeople);
+                    hotelTypes, hotelPeople, true);
             finalHotels.add(hotelWithExtensions);
         }
         return new GetFilteredHotelsResponse(finalHotels);

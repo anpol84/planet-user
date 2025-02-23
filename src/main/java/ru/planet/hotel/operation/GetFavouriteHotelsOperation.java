@@ -20,7 +20,7 @@ public class GetFavouriteHotelsOperation {
         var hotels = hotelRepository.getFavouriteHotels(userId);
         List<HotelWithoutExtensions> hotelsWithoutExtensions = new ArrayList<>();
         for (var hotel : hotels) {
-            hotelsWithoutExtensions.add(hotelMapper.buildHotel(hotel));
+            hotelsWithoutExtensions.add(hotelMapper.buildHotel(hotel, true));
         }
         return new GetFavouriteHotelsResponse(hotelsWithoutExtensions);
     }

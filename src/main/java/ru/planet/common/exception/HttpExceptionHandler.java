@@ -30,7 +30,7 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
     private static final HttpHeaders CORS_HEADERS = HttpHeaders.of(
             "Access-Control-Allow-Origin", "*",
             "Access-Control-Allow-Headers", "Content-Type, token",
-            "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+            "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
 
     private final JsonWriter<ErrorResponse> errorJsonWriter;
     private final AuthService authService;
@@ -38,6 +38,10 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
     @Override
     public CompletionStage<HttpServerResponse> intercept(Context context, HttpServerRequest request, InterceptChain chain)
             throws Exception {
+        if (request.method().equals("OPTIONS")) {
+            HttpServerResponse response = HttpServerResponse.of(200, CORS_HEADERS);
+            return CompletableFuture.completedFuture(response);
+        }
         if (isGetUsersRequest(request) || (request.path().equals("/api/hotels") && request.method().equals("POST"))
         || (request.pathParams().containsKey("hotelId") && Set.of("PUT", "DELETE").contains(request.method()))) {
             return validateAdminToken(request)
@@ -99,7 +103,7 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
 
     private CompletionStage<Boolean> validateTokenWithId(HttpServerRequest request) {
         return CompletableFuture.supplyAsync(() -> authService.checkTokenWithId(request.headers().getFirst(HEADER_TOKEN),
-                Long.parseLong(request.pathParams().get(USER_ID_PATH_VARIABLE))));
+                Long.parseLong("1")));
     }
 
     private CompletionStage<Boolean> validateToken(HttpServerRequest request) {
@@ -118,7 +122,7 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
 
     private HttpServerResponse handleError(Throwable e, HttpServerRequest request) {
         if (e instanceof HttpServerResponseException ex) {
-            return ex;
+            return HttpServerResponse.of(500, CORS_HEADERS, null);
         }
 
         var body = HttpBody.json(errorJsonWriter.toByteArrayUnchecked(new ErrorResponse(e.getCause().getMessage())));

@@ -107,6 +107,11 @@ public interface HotelRepository extends JdbcRepository {
     List<GetHotel> getHotels();
 
     @Query("""
+            SELECT EXISTS(SELECT 1 FROM user_favourite WHERE hotel_id = :hotelId AND user_id = :userId) 
+            """)
+    boolean validateFavouriteHotel(Long hotelId, Long userId);
+
+    @Query("""
             SELECT * FROM hotel h JOIN user_favourite u ON h.id = u.hotel_id WHERE u.user_id = :id
             """)
     @Mapping(GetHotelRowMapper.class)

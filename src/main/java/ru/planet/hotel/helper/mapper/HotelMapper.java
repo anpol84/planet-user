@@ -16,7 +16,8 @@ public interface HotelMapper {
     GetHotelResponse buildGetHotelResponse(GetHotel getHotel,
                                            List<RoomView> roomViews,
                                            List<RoomType> roomTypes,
-                                           List<RoomPeople> roomPeople);
+                                           List<RoomPeople> roomPeople,
+                                           boolean isFavourite);
 
-    HotelWithoutExtensions buildHotel(GetHotel hotel);
+    HotelWithoutExtensions buildHotel(GetHotel hotel, boolean isFavourite);
 }

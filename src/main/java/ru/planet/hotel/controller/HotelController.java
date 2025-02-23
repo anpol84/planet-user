@@ -29,7 +29,7 @@ public class HotelController implements HotelApiDelegate {
                                                                             FavouriteHotelRequest favouriteHotelRequest)
             throws Exception {
         addFavouriteHotelOperation.activate(userId, favouriteHotelRequest.hotelId());
-        return new HotelApiResponses.AddFavouriteHotelApiResponse.AddFavouriteHotel202ApiResponse();
+        return new HotelApiResponses.AddFavouriteHotelApiResponse.AddFavouriteHotel200ApiResponse();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class HotelController implements HotelApiDelegate {
                                                                                   FavouriteHotelRequest favouriteHotelRequest)
             throws Exception {
         deleteFavouriteHotelOperation.activate(userId, favouriteHotelRequest.hotelId());
-        return new HotelApiResponses.DeleteFavouriteHotelApiResponse.DeleteFavouriteHotel202ApiResponse();
+        return new HotelApiResponses.DeleteFavouriteHotelApiResponse.DeleteFavouriteHotel200ApiResponse();
     }
 
     @Override
@@ -71,13 +71,13 @@ public class HotelController implements HotelApiDelegate {
     }
 
     @Override
-    public HotelApiResponses.GetHotelApiResponse getHotel(long hotelId) throws Exception {
-        return new HotelApiResponses.GetHotelApiResponse.GetHotel200ApiResponse(getHotelOperation.activate(hotelId));
+    public HotelApiResponses.GetHotelApiResponse getHotel(long hotelId, String token) throws Exception {
+        return new HotelApiResponses.GetHotelApiResponse.GetHotel200ApiResponse(getHotelOperation.activate(hotelId, token));
     }
 
     @Override
-    public HotelApiResponses.GetHotelsApiResponse getHotels() throws Exception {
-        return new HotelApiResponses.GetHotelsApiResponse.GetHotels200ApiResponse(getHotelsOperation.activate());
+    public HotelApiResponses.GetHotelsApiResponse getHotels(String token) throws Exception {
+        return new HotelApiResponses.GetHotelsApiResponse.GetHotels200ApiResponse(getHotelsOperation.activate(token));
     }
 
     @Override
