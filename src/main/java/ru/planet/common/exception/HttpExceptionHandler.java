@@ -56,7 +56,8 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
                         }
                     });
         }
-        if (request.path().equals("/api/hotels/filter") && request.method().equals("POST")) {
+        if ((request.path().equals("/api/hotels/filter") && request.method().equals("POST")) ||
+                (request.path().equals("/api/feedback") && request.method().equals("POST")) || request.pathParams().containsKey("feedbackId")) {
             return validateToken(request)
                     .thenCompose(isValid -> {
                         if (!isValid) {
@@ -103,7 +104,7 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
 
     private CompletionStage<Boolean> validateTokenWithId(HttpServerRequest request) {
         return CompletableFuture.supplyAsync(() -> authService.checkTokenWithId(request.headers().getFirst(HEADER_TOKEN),
-                Long.parseLong("1")));
+                Long.parseLong(request.pathParams().get("userId"))));
     }
 
     private CompletionStage<Boolean> validateToken(HttpServerRequest request) {

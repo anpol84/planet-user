@@ -1,6 +1,7 @@
 package ru.planet.hotel.operation;
 
 import lombok.RequiredArgsConstructor;
+import ru.planet.auth.helper.JwtService;
 import ru.planet.hotel.helper.mapper.HotelMapper;
 import ru.planet.hotel.model.GetFilteredHotelsResponse;
 import ru.planet.hotel.model.GetHotelResponse;
@@ -15,19 +16,22 @@ import java.util.List;
 public class GetFilteredHotelsOperation {
     private final HotelRepository hotelRepository;
     private final HotelMapper hotelMapper;
+    private final JwtService jwtService;
 
-    public GetFilteredHotelsResponse activate(String city, double minPrice) {
+    public GetFilteredHotelsResponse activate(String city, double minPrice, String token) {
         var hotels = hotelRepository.getHotelsWithFilter(city, minPrice);
-        if (hotels.isEmpty()) {
+        if (hotels == null || hotels.isEmpty()) {
             return new GetFilteredHotelsResponse();
         }
+        var claims = token == null ? null : jwtService.getClaims(token);
         List<GetHotelResponse> finalHotels = new ArrayList<>();
         for (var hotel : hotels) {
             var hotelViews = hotelRepository.getHotelsView(hotel.id());
             var hotelTypes = hotelRepository.getHotelType(hotel.id());
             var hotelPeople = hotelRepository.getHotelPeople(hotel.id());
+            var isFavourite = claims != null && hotelRepository.validateFavouriteHotel(hotel.id(), Long.valueOf(String.valueOf(claims.get("user_id"))));
             var hotelWithExtensions = hotelMapper.buildGetHotelResponse(hotel, hotelViews,
-                    hotelTypes, hotelPeople, true);
+                    hotelTypes, hotelPeople, isFavourite);
             finalHotels.add(hotelWithExtensions);
         }
         return new GetFilteredHotelsResponse(finalHotels);

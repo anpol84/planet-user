@@ -11,6 +11,8 @@ tags:
     description: Get jwt token
   - name: hotel
     description: Manipulate a hotel
+  - name: feedback
+    description: Manipulate a feedback
 
 paths:
   /api/hotels:
@@ -678,6 +680,205 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /api/feedback:
+    post:
+      tags:
+        - feedback
+      summary: Create a new feedback
+      operationId: createFeedback
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFeedbackRequest'
+      responses:
+        '200':
+          description: Feedback created
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'login' или 'password' не передано"
+        '422':
+          description: Business logic error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - feedback
+      summary: Get a hotel feedbacks
+      operationId: getHotelFeedbacks
+      parameters:
+        - name: hotelId
+          in: query
+          required: true
+          description: Hotel id
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Hotel feedbacks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHotelFeedbacksResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'login' или 'password' не передано"
+        '422':
+          description: Business logic error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/feedback/{feedbackId}:
+    put:
+      tags:
+        - feedback
+      summary: Update a feedback
+      operationId: updateFeedback
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+        - name: feedbackId
+          in: path
+          required: true
+          description: Feedback id
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFeedbackRequest'
+      responses:
+        '200':
+          description: Feedback update
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'login' или 'password' не передано"
+        '422':
+          description: Business logic error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - feedback
+      summary: Delete a feedback
+      operationId: deleteFeedback
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+        - name: feedbackId
+          in: path
+          required: true
+          description: Feedback id
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Feedback deleted
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'login' или 'password' не передано"
+        '422':
+          description: Business logic error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - feedback
+      summary: Get a feedback
+      operationId: getFeedback
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+        - name: feedbackId
+          in: path
+          required: true
+          description: Feedback id
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Hotel feedbacks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFeedbackResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'login' или 'password' не передано"
+        '422':
+          description: Business logic error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   schemas:
@@ -1080,3 +1281,64 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/HotelWithoutExtensions'
+    CreateFeedbackRequest:
+      type: object
+      properties:
+        hotelId:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        body:
+          type: string
+        mark:
+          type: integer
+    GetHotelFeedbacksResponse:
+      type: object
+      properties:
+        hotels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Feedback'
+    Feedback:
+      type: object
+      required:
+        - mark
+        - body
+        - date
+        - userLogin
+        - id
+      properties:
+        id:
+          type: integer
+          format: int64
+        mark:
+          type: integer
+        body:
+          type: string
+        createdAt:
+          type: string
+          format: date
+        userLogin:
+          type: string
+    UpdateFeedbackRequest:
+      type: object
+      required:
+        - mark
+        - body
+      properties:
+        mark:
+          type: integer
+        body:
+          type: string
+    GetFeedbackResponse:
+      type: object
+      required:
+        - mark
+        - body
+      properties:
+        mark:
+          type: integer
+        body:
+          type: string

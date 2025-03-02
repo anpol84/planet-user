@@ -112,6 +112,11 @@ public interface HotelRepository extends JdbcRepository {
     boolean validateFavouriteHotel(Long hotelId, Long userId);
 
     @Query("""
+            SELECT EXISTS(SELECT 1 FROM hotel WHERE id = :hotelId)
+            """)
+    boolean validateHotel(Long hotelId);
+
+    @Query("""
             SELECT * FROM hotel h JOIN user_favourite u ON h.id = u.hotel_id WHERE u.user_id = :id
             """)
     @Mapping(GetHotelRowMapper.class)
@@ -189,7 +194,7 @@ public interface HotelRepository extends JdbcRepository {
     @Query("""
             DELETE FROM user_favourite WHERE user_id = :userId AND hotel_id = :hotelId
             """)
-    void deleteFavouriteHotel(Long userId, Long hotelId);
+    UpdateCount deleteFavouriteHotel(Long userId, Long hotelId);
 
     @Query("""
             DELETE FROM user_favourite WHERE hotel_id = :hotelId)

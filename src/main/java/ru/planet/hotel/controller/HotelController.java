@@ -63,7 +63,7 @@ public class HotelController implements HotelApiDelegate {
     @Override
     public HotelApiResponses.GetFilteredHotelsApiResponse getFilteredHotels(String token, String city, double minPrice)
             throws Exception {
-        var hotels = getFilteredHotelsOperation.activate(city, minPrice);
+        var hotels = getFilteredHotelsOperation.activate(city, minPrice, token);
         if (hotels.hotels() == null) {
             return new HotelApiResponses.GetFilteredHotelsApiResponse.GetFilteredHotels202ApiResponse();
         }
