@@ -13,6 +13,8 @@ tags:
     description: Manipulate a hotel
   - name: feedback
     description: Manipulate a feedback
+  - name: gpt
+    description: Ask gpt
 
 paths:
   /api/hotels:
@@ -879,6 +881,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /api/gpt:
+    post:
+      tags:
+        - gpt
+      summary: Ask a question
+      operationId: askGpt
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: Bearer token for authorization
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AskGptRequest'
+      responses:
+        '200':
+          description: Hotel feedbacks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AskGptResponse'
+        '400':
+          description: Ошибка валидации запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Поле 'login' или 'password' не передано"
+        '422':
+          description: Ошибка в бизнес логике
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   schemas:
@@ -1214,6 +1258,8 @@ components:
     GetFilteredHotelsResponse:
       type: object
       properties:
+        isError:
+          type: boolean
         hotels:
           type: array
           items:
@@ -1342,3 +1388,19 @@ components:
           type: integer
         body:
           type: string
+    AskGptRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+    AskGptResponse:
+      type: object
+      properties:
+        isError:
+          type: boolean
+        hotels:
+          type: array
+          items:
+            $ref: '#/components/schemas/HotelWithoutExtensions'

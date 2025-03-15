@@ -52,6 +52,9 @@ dependencies {
     implementation "ru.tinkoff.kora:resilient-kora"
     implementation 'org.mindrot:jbcrypt:0.4'
     implementation "ru.tinkoff.kora:cache-caffeine"
+    implementation "ru.tinkoff.kora:http-client-ok"
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
 
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'

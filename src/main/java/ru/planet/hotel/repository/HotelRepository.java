@@ -2,6 +2,8 @@ package ru.planet.hotel.repository;
 
 
 import jakarta.annotation.Nullable;
+import ru.planet.gpt.dto.GptHotel;
+import ru.planet.gpt.dto.GptResponse;
 import ru.planet.hotel.dto.*;
 import ru.tinkoff.kora.common.Mapping;
 import ru.tinkoff.kora.database.common.UpdateCount;
@@ -129,6 +131,22 @@ public interface HotelRepository extends JdbcRepository {
     @Mapping(GetHotelRowMapper.class)
     @Nullable
     List<GetHotel> getHotelsWithFilter(String city, double minPrice);
+
+    @Query("""
+            SELECT * FROM hotel
+            WHERE stars >= :gptHotel.stars
+            AND avg_rate >= :gptHotel.avgRate
+            AND min_price <= :gptHotel.minPrice
+            LIMIT 1000
+            """)
+    List<GetHotel> getHotelsForGpt(GptHotel gptHotel);
+
+    @Query("""
+            SELECT * FROM hotel
+            ORDER BY avg_rate DESC
+            LIMIT 50
+            """)
+    List<GetHotel> getBestHotels();
 
     @Query("""
             SELECT rv.id, rv.room_view_type, rv.price FROM hotel_room_view hv JOIN room_view rv ON hv.room_view_id = rv.id

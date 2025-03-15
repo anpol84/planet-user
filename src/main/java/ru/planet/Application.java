@@ -5,6 +5,7 @@ import ru.tinkoff.kora.cache.caffeine.CaffeineCacheModule;
 import ru.tinkoff.kora.common.KoraApp;
 import ru.tinkoff.kora.config.hocon.HoconConfigModule;
 import ru.tinkoff.kora.database.jdbc.JdbcDatabaseModule;
+import ru.tinkoff.kora.http.client.ok.OkHttpClientModule;
 import ru.tinkoff.kora.http.server.undertow.UndertowHttpServerModule;
 import ru.tinkoff.kora.json.module.JsonModule;
 import ru.tinkoff.kora.logging.logback.LogbackModule;
@@ -22,7 +23,8 @@ public interface Application extends
         JsonModule,
         ValidationModule,
         CaffeineCacheModule,
-        ResilientModule {
+        ResilientModule,
+        OkHttpClientModule {
 
     static void main(String[] args) {
         KoraApplication.run(ApplicationGraph::graph);

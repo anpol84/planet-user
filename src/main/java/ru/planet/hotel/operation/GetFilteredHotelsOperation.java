@@ -20,8 +20,10 @@ public class GetFilteredHotelsOperation {
 
     public GetFilteredHotelsResponse activate(String city, double minPrice, String token) {
         var hotels = hotelRepository.getHotelsWithFilter(city, minPrice);
+        boolean isError = false;
         if (hotels == null || hotels.isEmpty()) {
-            return new GetFilteredHotelsResponse();
+            hotels = hotelRepository.getBestHotels();
+            isError = true;
         }
         var claims = token == null ? null : jwtService.getClaims(token);
         List<GetHotelResponse> finalHotels = new ArrayList<>();
@@ -34,6 +36,6 @@ public class GetFilteredHotelsOperation {
                     hotelTypes, hotelPeople, isFavourite);
             finalHotels.add(hotelWithExtensions);
         }
-        return new GetFilteredHotelsResponse(finalHotels);
+        return new GetFilteredHotelsResponse(isError, finalHotels);
     }
 }
