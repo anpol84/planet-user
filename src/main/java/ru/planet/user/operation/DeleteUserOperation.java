@@ -19,15 +19,17 @@ public class DeleteUserOperation {
     public void activate(long id) {
         userRepository.deleteUserRoles(id);
         String login = userRepository.getLoginById(id);
-        userRepository.getJdbcConnectionFactory().inTx(() -> {
-            userRepository.deleteUserFavourites(id);
-            var hotels = feedbackRepository.getHotelsByUserId(id);
-            hotels.forEach((hotel) -> runAsync(() -> feedbackRepository.updateRate(hotel)));
-            feedbackRepository.deleteFeedbacksByUserId(id);
-            if (userRepository.deleteUser(id).value() == 0) {
-                throw new BusinessException("Такого пользователя не существует");
-            }
-        });
+        userRepository.getJdbcConnectionFactory().inTx(() -> processDeleting(id));
         userCache.invalidate(login);
+    }
+
+    private void processDeleting(Long id) {
+        userRepository.deleteUserFavourites(id);
+        var hotels = feedbackRepository.getHotelsByUserId(id);
+        hotels.forEach((hotel) -> runAsync(() -> feedbackRepository.updateRate(hotel)));
+        feedbackRepository.deleteFeedbacksByUserId(id);
+        if (userRepository.deleteUser(id).value() == 0) {
+            throw new BusinessException("Такого пользователя не существует");
+        }
     }
 }

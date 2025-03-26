@@ -7,6 +7,6 @@ import java.util.List;
 
 @EntityJdbc
 @Builder
-public record GetHotel(Long id, String name, String city, String imageUrl, double minPrice, double maxPrice,
-                       double avgRate, int stars, List<Addition> additions, List<Position> positions) {
+public record GetHotel(Long id, String name, String city, String imageUrl, double minPrice, double avgRate,
+                       int stars, List<Addition> additions, List<Position> positions) {
 }

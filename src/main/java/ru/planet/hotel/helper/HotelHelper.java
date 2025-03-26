@@ -21,12 +21,6 @@ public class HotelHelper {
                 roomPeople.stream().map(RoomPeople::price)).min(Double::compare).get();
     }
 
-    public double calculateMax(List<RoomView> roomViews, List<RoomType> roomTypes, List<RoomPeople> roomPeople) {
-        return Stream.concat(Stream.concat(roomViews.stream().map(RoomView::price),
-                        roomTypes.stream().map(RoomType::price)),
-                roomPeople.stream().map(RoomPeople::price)).max(Double::compare).get();
-    }
-
     public List<Long> extractRoomViews(List<RoomView> roomViews) {
         return roomViews.stream()
                 .map(roomView -> {

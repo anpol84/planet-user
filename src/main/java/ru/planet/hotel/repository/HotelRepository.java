@@ -23,18 +23,18 @@ public interface HotelRepository extends JdbcRepository {
 
 
     @Query("""
-               INSERT INTO hotel (name, city, stars, image_url, additions, positions, min_price, max_price)
+               INSERT INTO hotel (name, city, stars, image_url, additions, positions, min_price)
                VALUES (:createHotel.name, :createHotel.city, :createHotel.stars, :createHotel.imageUrl,
                        string_to_array(trim(both '[]' from :additions), ', ')::addition[],
                        string_to_array(trim(both '[]' from :positions), ', ')::"position"[],
-                       :minPrice, :maxPrice)
+                       :minPrice)
                RETURNING id
         """)
-    Long saveHotel(CreateHotel createHotel, String additions, String positions, double minPrice, double maxPrice);
+    Long saveHotel(CreateHotel createHotel, String additions, String positions, double minPrice);
 
     @Query("""
             UPDATE hotel SET name = :hotel.name, city = :hotel.city, stars = :hotel.stars,
-            image_url = :hotel.imageUrl, min_price = :hotel.minPrice, max_price = :hotel.maxPrice,
+            image_url = :hotel.imageUrl, min_price = :hotel.minPrice,
             additions =  string_to_array(trim(both '[]' from :additions), ', ')::addition[],
             positions =  string_to_array(trim(both '[]' from :positions), ', ')::"position"[]
             WHERE id = :hotel.id
@@ -242,7 +242,6 @@ public interface HotelRepository extends JdbcRepository {
                     .stars(rs.getInt("stars"))
                     .avgRate(rs.getDouble("avg_rate"))
                     .minPrice(rs.getDouble("min_price"))
-                    .maxPrice(rs.getDouble("max_price"))
                     .imageUrl(rs.getString("image_url"))
                     .additions(additions)
                     .positions(positions)

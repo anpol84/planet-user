@@ -20,7 +20,6 @@ public class UpdateHotelOperation {
 
     public void activate(UpdateHotelRequest request, Long hotelId) {
         double minPrice = hotelHelper.calculateMin(request.roomViews(), request.roomTypes(), request.roomPeople());
-        double maxPrice = hotelHelper.calculateMax(request.roomViews(), request.roomTypes(), request.roomPeople());
         var newHotel = GetHotel.builder()
                 .id(hotelId)
                 .stars(request.stars())
@@ -28,7 +27,6 @@ public class UpdateHotelOperation {
                 .name(request.name())
                 .imageUrl(request.imageUrl())
                 .minPrice(minPrice)
-                .maxPrice(maxPrice)
                 .build();
         hotelRepository.getJdbcConnectionFactory().inTx(() -> {
             try {

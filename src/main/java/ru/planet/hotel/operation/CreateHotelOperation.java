@@ -9,10 +9,6 @@ import ru.planet.hotel.repository.HotelRepository;
 import ru.tinkoff.kora.common.Component;
 import ru.tinkoff.kora.database.jdbc.RuntimeSqlException;
 
-import java.sql.BatchUpdateException;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.stream.Stream;
 
 import static ru.planet.common.DuplicateExceptionValidator.validateDuplicatePositionException;
 
@@ -31,12 +27,11 @@ public class CreateHotelOperation {
         var roomPeople = hotelHelper.extractRoomPeople(request.roomPeople());
 
         double minPrice = hotelHelper.calculateMin(request.roomViews(), request.roomTypes(), request.roomPeople());
-        double maxPrice = hotelHelper.calculateMax(request.roomViews(), request.roomTypes(), request.roomPeople());
 
         hotelRepository.getJdbcConnectionFactory().inTx(() -> {
             try {
                 Long hotelId = hotelRepository.saveHotel(hotel, hotel.additions().toString(),
-                        hotel.positions().toString(), minPrice, maxPrice);
+                        hotel.positions().toString(), minPrice);
                 roomViews.forEach((room) -> hotelRepository.saveHotelWithRoomView(hotelId, room));
                 roomTypes.forEach((room) -> hotelRepository.saveHotelWithRoomType(hotelId, room));
                 roomPeople.forEach((room) -> hotelRepository.saveHotelWithRoomPeople(hotelId, room));
@@ -49,6 +44,5 @@ public class CreateHotelOperation {
         });
 
     }
-
 
 }

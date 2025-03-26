@@ -1,5 +1,7 @@
-package ru.planet.auth.configuration;
+package ru.planet.common.configuration;
 
+import ru.planet.gpt.cache.QueryCache;
+import ru.planet.gpt.client.GigaChatDialog;
 import ru.tinkoff.kora.cache.LoadableCache;
 import ru.tinkoff.kora.common.Module;
 import ru.planet.auth.cache.RoleCache;
@@ -17,5 +19,8 @@ public interface AppCacheModule {
 
     default LoadableCache<Long, List<String>> roleCache(RoleCache roleCache, AuthRepository authRepository) {
         return roleCache.asLoadableSimple(authRepository::findRoles);
+    }
+    default LoadableCache<String, String> queryCache(QueryCache queryCache, GigaChatDialog gigaChatDialog) {
+        return queryCache.asLoadableSimple(gigaChatDialog::getResponse);
     }
 }

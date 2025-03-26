@@ -4,6 +4,8 @@ FROM ${RUN_IMAGE}
 ARG TARGET_DIR=/opt/app
 ARG SOURCE_DIR=build/distributions
 
+COPY russian_trusted_root_ca.cer russian_trusted_root_ca.cer
+
 COPY $SOURCE_DIR/*.tar application.tar
 RUN mkdir $TARGET_DIR
 RUN tar -xf application.tar -C $TARGET_DIR

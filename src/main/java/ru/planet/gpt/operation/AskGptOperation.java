@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import ru.planet.auth.helper.JwtService;
+import ru.planet.gpt.cache.QueryCache;
 import ru.planet.gpt.client.GigaChatDialog;
 import ru.planet.gpt.dto.GptHotel;
 import ru.planet.gpt.dto.GptResponse;
@@ -16,6 +17,7 @@ import ru.planet.hotel.model.AskGptRequest;
 import ru.planet.hotel.model.AskGptResponse;
 import ru.planet.hotel.model.HotelWithoutExtensions;
 import ru.planet.hotel.repository.HotelRepository;
+import ru.tinkoff.kora.cache.LoadableCache;
 import ru.tinkoff.kora.common.Component;
 
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class AskGptOperation {
-    private final GigaChatDialog gigaChatDialog;
+    private final LoadableCache<String, String> queryCache;
     private final HotelRepository hotelRepository;
     private final HotelMapper hotelMapper;
     private final JwtService jwtService;
@@ -39,7 +41,7 @@ public class AskGptOperation {
         List<GetHotel> filteredHotels;
         boolean isError = false;
         try {
-            String response = gigaChatDialog.getResponse(request.query());
+            String response = queryCache.get(request.query());
             GptResponse gptResponse = objectMapper.readValue(response, GptResponse.class);
             gptHotelTemp = objectMapper.readValue(gptResponse.choices().get(0).message().content(), GptHotel.class);
             hotels = hotelRepository.getHotelsForGpt(gptHotelTemp);

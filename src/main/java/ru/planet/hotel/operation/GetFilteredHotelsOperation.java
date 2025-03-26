@@ -31,7 +31,8 @@ public class GetFilteredHotelsOperation {
             var hotelViews = hotelRepository.getHotelsView(hotel.id());
             var hotelTypes = hotelRepository.getHotelType(hotel.id());
             var hotelPeople = hotelRepository.getHotelPeople(hotel.id());
-            var isFavourite = claims != null && hotelRepository.validateFavouriteHotel(hotel.id(), Long.valueOf(String.valueOf(claims.get("user_id"))));
+            var isFavourite = claims != null && hotelRepository.validateFavouriteHotel(hotel.id(),
+                    Long.valueOf(String.valueOf(claims.get("user_id"))));
             var hotelWithExtensions = hotelMapper.buildGetHotelResponse(hotel, hotelViews,
                     hotelTypes, hotelPeople, isFavourite);
             finalHotels.add(hotelWithExtensions);
