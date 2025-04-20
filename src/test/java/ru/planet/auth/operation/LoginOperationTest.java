@@ -78,7 +78,7 @@ public class LoginOperationTest {
         Exception exception = assertThrows(ValidationException.class, () -> {
             loginOperation.activate("", password);
         });
-        assertEquals("login or password is not presented or empty", exception.getMessage());
+        assertEquals("Логин или пароль пустые", exception.getMessage());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class LoginOperationTest {
         Exception exception = assertThrows(ValidationException.class, () -> {
             loginOperation.activate(login, "");
         });
-        assertEquals("login or password is not presented or empty", exception.getMessage());
+        assertEquals("Логин или пароль пустые", exception.getMessage());
     }
 
     @Test
@@ -96,7 +96,7 @@ public class LoginOperationTest {
         Exception exception = assertThrows(BusinessException.class, () -> {
             loginOperation.activate(login, password);
         });
-        assertEquals("login or password incorrect", exception.getMessage());
+        assertEquals("Логин или пароль неправильные", exception.getMessage());
     }
 
     @Test
@@ -107,6 +107,6 @@ public class LoginOperationTest {
         Exception exception = assertThrows(BusinessException.class, () -> {
             loginOperation.activate(login, password);
         });
-        assertEquals("login or password incorrect", exception.getMessage());
+        assertEquals("Логин или пароль неправильные", exception.getMessage());
     }
 }

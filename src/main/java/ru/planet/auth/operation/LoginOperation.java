@@ -22,13 +22,13 @@ public class LoginOperation {
 
     public String activate(String login, String password) {
         if (login.isEmpty() || password.isEmpty()) {
-            throw new ValidationException("login or password is not presented or empty");
+            throw new ValidationException("Логин или пароль пустые");
         }
         var user = userCache.get(login);
         String hashPassword = BCrypt.hashpw(password, bcryptProperties.salt());
         if (user != null && user.password().equals(hashPassword)) {
             return jwtService.generateJwt(user, roleCache.get(user.id()));
         }
-        throw new BusinessException("login or password incorrect");
+        throw new BusinessException("Логин или пароль неправильные");
     }
 }

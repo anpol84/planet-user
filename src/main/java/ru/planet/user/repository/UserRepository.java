@@ -53,7 +53,7 @@ public interface UserRepository extends JdbcRepository {
     String getLoginById(Long id);
 
     @Query("""
-            DELETE FROM user_favourite WHERE user_id = :userId)
+            DELETE FROM user_favourite WHERE user_id = :userId
             """)
     void deleteUserFavourites(Long userId);
 

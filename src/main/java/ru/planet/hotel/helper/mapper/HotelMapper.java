@@ -1,6 +1,8 @@
 package ru.planet.hotel.helper.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import ru.planet.gpt.dto.GptHotel;
 import ru.planet.hotel.dto.*;
 import ru.planet.hotel.model.CreateHotelRequest;
 import ru.planet.hotel.model.GetHotelResponse;
@@ -20,4 +22,7 @@ public interface HotelMapper {
                                            boolean isFavourite);
 
     HotelWithoutExtensions buildHotel(GetHotel hotel, boolean isFavourite);
+
+    @Mapping(target = "minPrice", source = "minPrice")
+    GptHotel buildPrice(GptHotel hotel, int minPrice);
 }

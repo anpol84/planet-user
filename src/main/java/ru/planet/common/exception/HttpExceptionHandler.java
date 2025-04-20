@@ -47,7 +47,7 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
             return validateAdminToken(request)
                     .thenCompose(isValid -> {
                         if (!isValid) {
-                            return createErrorResponse("token is not valid", 403);
+                            return createErrorResponse("Токен не валиден", 403);
                         }
                         try {
                             return processRequest(context, request, chain);
@@ -61,7 +61,7 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
             return validateToken(request)
                     .thenCompose(isValid -> {
                         if (!isValid) {
-                            return createErrorResponse("token is not valid", 403);
+                            return createErrorResponse("Токен не валиден", 403);
                         }
                         try {
                             return processRequest(context, request, chain);
@@ -74,7 +74,7 @@ public final class HttpExceptionHandler implements HttpServerInterceptor {
             return validateTokenWithId(request)
                     .thenCompose(isValid -> {
                         if (!isValid) {
-                            return createErrorResponse("token is not valid", 403);
+                            return createErrorResponse("Токен не валиден", 403);
                         }
                         try {
                             return processRequest(context, request, chain);

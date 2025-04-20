@@ -2,10 +2,7 @@ package ru.planet.gpt.operation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import ru.planet.auth.helper.JwtService;
-import ru.planet.gpt.cache.QueryCache;
-import ru.planet.gpt.client.GigaChatDialog;
 import ru.planet.gpt.dto.GptHotel;
 import ru.planet.gpt.dto.GptResponse;
 import ru.planet.hotel.dto.GetHotel;
@@ -42,8 +39,12 @@ public class AskGptOperation {
         boolean isError = false;
         try {
             String response = queryCache.get(request.query());
+            System.out.println(response);
             GptResponse gptResponse = objectMapper.readValue(response, GptResponse.class);
             gptHotelTemp = objectMapper.readValue(gptResponse.choices().get(0).message().content(), GptHotel.class);
+            if(gptHotelTemp.minPrice() == 0) {
+                gptHotelTemp = hotelMapper.buildPrice(gptHotelTemp, Integer.MAX_VALUE);
+            }
             hotels = hotelRepository.getHotelsForGpt(gptHotelTemp);
         } catch (Exception e) {
             hotels = new ArrayList<>();
@@ -51,68 +52,76 @@ public class AskGptOperation {
         }
         var gptHotel = gptHotelTemp;
         if (!hotels.isEmpty()) {
-
-            if (!gptHotel.name().isEmpty()) {
+            if (gptHotel.name() != null && !gptHotel.name().isEmpty()) {
                 hotels = hotels.stream()
-                        .filter(hotel -> hotel.name().equals(gptHotel.name()))
+                        .filter(hotel -> hotel.name().equalsIgnoreCase(gptHotel.name()))
                         .toList();
             }
-            if (!gptHotel.city().isEmpty()) {
+            if (gptHotel.city() != null && !gptHotel.city().isEmpty()) {
                 hotels = hotels.stream()
-                        .filter(hotel -> hotel.city().equals(gptHotel.city()))
+                        .filter(hotel -> hotel.city().equalsIgnoreCase(gptHotel.city()))
                         .toList();
             }
 
+            if (gptHotel.additions() != null) {
+                hotels = hotels.stream()
+                        .filter(hotel -> (new HashSet<>(hotel.additions()).containsAll(gptHotel.additions()) || gptHotel.additions().isEmpty()))
+                        .toList();
+            }
 
-            hotels = hotels.stream()
-                    .filter(hotel -> (new HashSet<>(hotel.additions()).containsAll(gptHotel.additions()) || gptHotel.additions().isEmpty())
-                            && (new HashSet<>(hotel.positions()).containsAll(gptHotel.positions()) || gptHotel.positions().isEmpty()))
-                    .toList();
+            if (gptHotel.positions() != null) {
+                hotels = hotels.stream()
+                        .filter(hotel -> (new HashSet<>(hotel.positions()).containsAll(gptHotel.positions()) || gptHotel.positions().isEmpty()))
+                        .toList();
+            }
 
             filteredHotels = hotels.stream()
                     .filter(hotel -> {
                         var roomViews = hotelRepository.getHotelsView(hotel.id());
-                        boolean containsRoomView = gptHotel.roomView().isEmpty();
-                        for (var roomView : roomViews) {
-                            Optional<RoomView> view = gptHotel.roomView().stream()
-                                    .filter(item -> item.type().equals(roomView.type()))
-                                    .findAny();
-                            if (view.isPresent() && view.get().price() >= roomView.price()) {
-                                containsRoomView = true;
-                                break;
+                        boolean containsRoomView = gptHotel.roomView() == null || gptHotel.roomView().isEmpty();
+                        if (gptHotel.roomView() != null) {
+                            for (var roomView : roomViews) {
+                                Optional<RoomView> view = gptHotel.roomView().stream()
+                                        .filter(item -> item.type().equals(roomView.type()))
+                                        .findAny();
+                                if (view.isPresent() && view.get().price() >= roomView.price()) {
+                                    containsRoomView = true;
+                                    break;
+                                }
                             }
                         }
-                        ;
                         if (!containsRoomView) {
                             return false;
                         }
                         var roomTypes = hotelRepository.getHotelType(hotel.id());
-                        boolean containsRoomTypes = gptHotel.roomType().isEmpty();
-                        for (var roomType : roomTypes) {
-                            Optional<RoomType> type = gptHotel.roomType().stream()
-                                    .filter(item -> item.type().equals(roomType.type()))
-                                    .findAny();
-                            if (type.isPresent() && type.get().price() >= roomType.price()) {
-                                containsRoomTypes = true;
-                                break;
+                        boolean containsRoomTypes = gptHotel.roomType() == null || gptHotel.roomType().isEmpty();
+                        if (gptHotel.roomType() != null) {
+                            for (var roomType : roomTypes) {
+                                Optional<RoomType> type = gptHotel.roomType().stream()
+                                        .filter(item -> item.type().equals(roomType.type()))
+                                        .findAny();
+                                if (type.isPresent() && type.get().price() >= roomType.price()) {
+                                    containsRoomTypes = true;
+                                    break;
+                                }
                             }
                         }
-                        ;
                         if (!containsRoomTypes) {
                             return false;
                         }
                         var roomPeople = hotelRepository.getHotelPeople(hotel.id());
-                        boolean containsRoomPeople = gptHotel.roomPeople().isEmpty();
-                        for (var roomHuman : roomPeople) {
-                            Optional<RoomPeople> people = gptHotel.roomPeople().stream()
-                                    .filter(item -> item.type().equals(roomHuman.type()))
-                                    .findAny();
-                            if (people.isPresent() && people.get().price() >= roomHuman.price()) {
-                                containsRoomPeople = true;
-                                break;
+                        boolean containsRoomPeople = gptHotel.roomPeople() == null || gptHotel.roomPeople().isEmpty();
+                        if (gptHotel.roomPeople() != null) {
+                            for (var roomHuman : roomPeople) {
+                                Optional<RoomPeople> people = gptHotel.roomPeople().stream()
+                                        .filter(item -> item.type().equals(roomHuman.type()))
+                                        .findAny();
+                                if (people.isPresent() && people.get().price() >= roomHuman.price()) {
+                                    containsRoomPeople = true;
+                                    break;
+                                }
                             }
                         }
-                        ;
                         return containsRoomPeople;
                     })
                     .toList();

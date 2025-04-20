@@ -109,7 +109,7 @@ public interface HotelRepository extends JdbcRepository {
     List<GetHotel> getHotels();
 
     @Query("""
-            SELECT EXISTS(SELECT 1 FROM user_favourite WHERE hotel_id = :hotelId AND user_id = :userId) 
+            SELECT EXISTS (SELECT 1 FROM user_favourite WHERE hotel_id = :hotelId AND user_id = :userId) 
             """)
     boolean validateFavouriteHotel(Long hotelId, Long userId);
 
@@ -215,7 +215,7 @@ public interface HotelRepository extends JdbcRepository {
     UpdateCount deleteFavouriteHotel(Long userId, Long hotelId);
 
     @Query("""
-            DELETE FROM user_favourite WHERE hotel_id = :hotelId)
+            DELETE FROM user_favourite WHERE hotel_id = :hotelId
             """)
     void deleteHotelFavourites(Long hotelId);
 
